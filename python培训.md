@@ -553,8 +553,386 @@ print("H" not in string)     # Output: False
 print("x" not in string)     # Output: True
 ```
 ### 1.5 字符串常用方法
+- 字符串格式化
+字符串格式化是指在输出或拼接字符串时，根据一定的格式规则将变量或表达式的值插入到字符串中的特定位置。
+在Python中，字符串格式化有多种方式，以下是其中几种常用的方法：
+1. 使用占位符：可以使用占位符（例如%s、%d等）来表示要插入的值的类型，并将变量或表达式作为参数传递给字符串的%操作符。
+```python 
+name = "Alice"
+age = 25
+message = "My name is %s and I'm %d years old." % (name, age)
+print(message)
+```
+```python 
+# 输出结果：
+My name is Alice and I'm 25 years old.
+```
+2. 使用format方法：可以使用字符串的format方法，通过花括号{}和位置索引或关键字来指定插入的值。
+```python 
+name = "Bob"
+age = 30
+message = "My name is {} and I'm {} years old.".format(name, age)
+print(message)
+```
+```python 
+# 输出结果：
+My name is Bob and I'm 30 years old.
+```
+```python
+# 通过在花括号 {} 内添加索引号来指定要插入的变量的顺序
+name = "Alice"
+age = 25
+country = "China"
+
+print("My name is {1}, I am {0} years old, and I am from {2}.".format(age, name, country))
+# Output: My name is Alice, I am 25 years old, and I am from China.
+```
+```python
+# 通过在花括号 {} 内添加格式说明符来指定值的格式
+# 以下是一些常用的格式说明符示例：
+# {:d}：整数类型
+# {:f}：浮点数类型
+# {:s}：字符串类型
+# {:x}：十六进制整数类型
+# {:b}：二进制整数类型
+num = 42
+pi = 3.1415926
+name = "Alice"
+
+print("My number is {:d}".format(num))
+# Output: My number is 42
+
+print("The value of pi is {:.2f}".format(pi))
+# Output: The value of pi is 3.14
+
+print("Hello, {}!".format(name))
+# Output: Hello, Alice!
+
+# {:d} 表示整数类型，{:.2f} 表示浮点数类型并保留两位小数，{:s} 表示字符串类型。
+```
+```python
+num = 42
+
+print("My number is {:>5}".format(num))
+# Output: My number is    42
+
+print("My number is {:0>5}".format(num))
+# Output: My number is 00042
+
+# {:>5} 表示向右对齐，并使用空格填充到宽度为 5，{:0>5} 表示向右对齐，并使用零填充到宽度为 5。
+```
+3. 使用f-string（格式化字符串字面值）：在Python 3.6及以上版本中，可以使用以f开头的字符串，在其中直接嵌入变量或表达式，并使用花括号{}来表示插入点。
+```python
+name = "Charlie"
+age = 35
+message = f"My name is {name} and I'm {age} years old."
+print(message)
+```
+```python
+# 输出结果：
+My name is Charlie and I'm 35 years old.
+```
+- replace() 函数
+replace() 函数是字符串的内置方法，用于替换字符串中的子字符串。它接受两个参数：旧子字符串和新子字符串，并返回一个替换后的新字符串。
+以下是 replace() 函数的语法：
+*original_string：原始的字符串，需要被替换的字符串。*
+*old_str：需要被替换的子字符串。*
+*new_str：用于替换的新子字符串。*
+*new_string：替换后的新字符串。*
+`new_string = original_string.replace(old_str, new_str)`
+```python
+# 将原始字符串 text 中的所有 "Hello" 替换为 "Hi"，并将结果存储在 new_text 中。
+text = "Hello, World! Hello, Python!"
+new_text = text.replace("Hello", "Hi")
+
+print(new_text)
+# Output: Hi, World! Hi, Python!
+```
+<span style="color:red;">需要注意的是，replace() 方法返回的是一个新的字符串，原始字符串不会受到影响。另外，replace() 方法是区分大小写的，如果要进行大小写不敏感的替换，可以先使用 .lower() 或 .upper() 方法转换大小写。</span>
+
+```python
+# 先将字符串转换为小写，然后再进行替换。
+text = "Hello, World! hello, python!"
+new_text = text.lower().replace("hello", "Hi")
+
+print(new_text)
+# Output: hi, world! hi, python!
+```
+- split() 函数
+split() 函数是字符串的内置方法，用于将一个字符串拆分成多个子字符串，并以列表的形式返回这些子字符串。
+以下是 split() 函数的语法：
+*original_string：原始的字符串，需要被拆分的字符串。*
+*separator：可选参数，用于指定拆分字符串的分隔符，默认为空白字符（空格、制表符、换行符等）。*
+`string_list = original_string.split(separator)`
+```python
+# 使用 split() 方法将字符串 text 拆分成多个子字符串，并将结果存储在列表中
+text = "Hello, World! This is Python."
+
+# 使用空格作为分隔符拆分字符串
+words = text.split()
+
+print(words)
+# Output: ['Hello,', 'World!', 'This', 'is', 'Python.']
+
+
+# 使用逗号作为分隔符拆分字符串
+phrases = text.split(',')
+
+print(phrases)
+# Output: ['Hello', ' World! This is Python.']
+```
+```python
+# 通过指定 maxsplit 参数来限制拆分的次数
+text = "one two three four five"
+
+# 拆分字符串，最多拆分两次
+words = text.split(maxsplit=2)
+
+print(words)
+# Output: ['one', 'two', 'three four five']
+```
 ### 1.6 分岔路口
+- if分支结构
+    - if单分支结构
+    if 单分支结构是 if 条件语句的一种形式，它只包含一个 if 语句，用于在给定条件为真时执行相应的代码块。
+    以下是 if 单分支结构的基本语法：
+    ```python
+    if condition:
+        # 如果条件为真，则执行这里的代码
+    ```
+    在单分支结构中，condition 是一个表达式或值，用于判断条件是否成立。如果条件成立（即为真），则执行代码块；如果条件不成立（即为假），则跳过代码块。
+    ```python
+    # 根据条件判断年龄是否大于等于 18 岁。如果年龄大于等于 18 岁，则打印一条消息。
+    age = 25
+
+    if age >= 18:
+        print("您已经成年，可以参加选举。")
+
+    ```
+    
+    ```mermaid
+    graph LR
+    st((开始))
+    input[输入变量X]
+    cond{X > 0?}
+    op[执行操作]
+    out[输出结果]
+    e((结束))
+
+    st --> input
+    input --> cond
+    cond -- 是 --> op
+    op --> out
+    out --> e
+    cond -- 否 --> e
+    ```
+    *比较运算符*
+    <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th {
+        background-color: lightblue;
+        color: white;
+        font-weight: bold;
+        padding: 8px;
+        text-align: left;
+    }
+    td {
+        padding: 8px;
+        border: 1px solid #ddd;
+    }
+    </style>
+
+    <table>
+    <tr>
+        <th>运算符</th>
+        <th>描述</th>
+        <th>示例</th>
+        <th>结果</th>
+    </tr>
+    <tr>
+        <td>==</td>
+        <td>等于</td>
+        <td>5 == 5</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>!=</td>
+        <td>不等于</td>
+        <td>5 != 3</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>&gt;</td>
+        <td>大于</td>
+        <td>7 &gt; 3</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>&lt;</td>
+        <td>小于</td>
+        <td>2 &lt; 4</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>&gt;=</td>
+        <td>大于等于</td>
+        <td>6 &gt;= 6</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>&lt;=</td>
+        <td>小于等于</td>
+        <td>4 &lt;= 3</td>
+        <td>False</td>
+    </tr>
+    </table>
+
+    <span style="color:red;">注：=表示赋值符号，==表示等于符号</span>
+    
+    - if双分支结构
+    if双分支结构是一种常见的编程控制结构，用于在程序中根据条件执行不同的操作。它基于一个条件表达式，如果条件为真，则执行一个代码块（通常称为"if块"或"if分支"），如果条件为假，则执行另一个代码块（通常称为"else块"或"else分支"）。
+    以下是描述if双分支结构的一般形式：
+    ```python
+    if 条件:
+        # 如果条件为真，则执行这个代码块
+        执行操作1
+    else:
+        # 如果条件为假，则执行这个代码块
+        执行操作2
+    ```
+    在 if 双分支结构中，首先判断条件的真假。如果条件为真，则执行代码块中的操作1；如果条件为假，则跳过代码块中的操作1，执行 else 块中的操作2。
+    ```python
+    # 如果成绩大于等于90，条件score >= 90为真，那么程序将执行if块中的操作，即打印出"优秀"。
+    # 如果条件为假，即成绩小于90，那么程序将跳过if块，执行else块中的操作，即打印出"良好"。
+    score = float(input("请输入您的成绩: "))
+
+    if score >= 90:
+        print("优秀")
+    else:
+        print("良好")
+    ```
+    ```mermaid
+    graph LR
+        st((开始))
+        input[输入变量X]
+        cond{X > 0?}
+        op1[执行操作1]
+        op2[执行操作2]
+        out[输出结果]
+        e((结束))
+
+        st --> input
+        input --> cond
+        cond -- 是 --> op1
+        op1 --> out
+        out --> e
+        cond -- 否 --> op2
+        op2 --> out
+        out --> e
+    ```
+    - if elif..多分支结构
+    if-elif-else结构可以处理多个条件，并根据条件的判断结果选择相应的代码块执行。
+    以下是描述if-elif-else多分支结构的一般形式：
+    ```python
+    if 条件1:
+        # 如果条件1为真，则执行这个代码块
+        执行操作1
+    elif 条件2:
+        # 如果条件1为假而条件2为真，则执行这个代码块
+        执行操作2
+    elif 条件3:
+        # 如果条件1和条件2都为假而条件3为真，则执行这个代码块
+        执行操作3
+    ...
+    else:
+        # 如果所有条件都为假，则执行这个代码块
+        执行默认操作
+    ```
+    在if-elif-else结构中，首先根据条件1的判断结果来确定是否执行操作1。如果条件1为真，则执行操作1，并跳过后续的elif和else块；如果条件1为假，则继续检查条件2，如果条件2为真，则执行操作2，并跳过后续的elif和else块；以此类推，直到找到第一个为真的条件，并执行相应的操作；如果所有条件都为假，则执行else块中的操作，作为默认操作。
+    ```python
+    score = float(input("请输入您的成绩: "))
+
+    if score >= 90:
+        print("优秀")
+    elif score >= 80:
+        print("良好")
+    elif score >= 60:
+        print("及格")
+    else:
+        print("不及格")
+    ```
+    ```mermaid
+    graph LR
+    st((开始))
+    cond1{判断条件1是否为真?}
+    cond2{判断条件2是否为真?}
+    cond3{判断条件3是否为真?}
+    op1[执行操作1]
+    op2[执行操作2]
+    op3[执行操作3]
+    default[执行默认操作]
+    e((结束))
+
+    st --> cond1
+    cond1 -- 是 --> op1 --> e
+    cond1 -- 否 --> cond2
+    cond2 -- 是 --> op2 --> e
+    cond2 -- 否 --> cond3
+    cond3 -- 是 --> op3 --> e
+    cond3 -- 否 --> default --> e
+    ```
+- 分支结构嵌套
+分支嵌套是指在一个分支结构中嵌套另一个分支结构，以实现更复杂的条件判断和操作执行。以下是一个展示分支嵌套结果的示例：
+```python
+score = float(input("请输入您的成绩: "))
+
+if score >= 60:
+    if score >= 90:
+        print("优秀")
+    elif score >= 80:
+        print("良好")
+    else:
+        print("及格")
+else:
+    print("不及格")
+```
+在这个示例中，首先程序会要求用户输入一个成绩，并将其保存在变量 score 中。
+
+接下来，程序使用外部的 if 结构进行整体判断，即判断是否达到及格分数线（60 分）。如果满足外部的条件，程序将进入外部的 if 块。
+
+在外部的 if 块中，又嵌套了一个内部的 if-elif-else 结构。在内部结构中，首先判断是否达到优秀分数线（90 分），如果是，则打印出"优秀"；如果不是，则继续判断是否达到良好分数线（80 分），如果是，则打印出"良好"；如果也不是，则执行内部结构的 else 块，打印出"及格"。
+
+如果外部的 if 结构中的条件判断为假，即成绩低于及格分数线，那么程序将跳过外部的 if 块，直接执行外部结构的 else 块，打印出"不及格"。
+
+- 逻辑运算符
+逻辑运算符用于在条件判断中组合多个条件，并根据这些条件的逻辑关系得出最终的判断结果。在Python中，常用的逻辑运算符包括以下三个：
+1. 与运算符（and）：如果两个条件都为真，则返回真；否则返回假。
+2. 或运算符（or）：如果两个条件中至少有一个为真，则返回真；否则返回假。
+3. 非运算符（not）：如果条件为真，则返回假；如果条件为假，则返回真。
+以下是逻辑运算符的使用示例：
+```python
+x = 5
+y = 10
+
+# 与运算符示例
+if x > 0 and y > 0:
+    print("x和y都大于0")
+
+# 或运算符示例
+if x > 0 or y > 0:
+    print("x或者y大于0")
+
+# 非运算符示例
+if not x > 0:
+    print("x不大于0")
+```
+
 ### 1.7 有限次的for循环
+
+
 ### 1.8 不限次的while循环
 ### 1.9 数据结构-列表
 ### 1.10 数据结构-字典
