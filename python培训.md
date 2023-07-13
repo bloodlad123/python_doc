@@ -1013,9 +1013,421 @@ for i in range(1, 10, 2):
 9
 ```
 <font color="red">需要注意的是，range() 函数生成的整数序列是左闭右开的，即不包括 stop 参数指定的值。</font>
+
+#### 1.7.3 for...if...嵌套
+当需要在嵌套的 for 循环中使用 if 语句进行条件筛选时，可以按照以下结构来编写代码：
+```python
+for outer_item in outer_sequence:
+    # 外部循环操作
+    
+    for inner_item in inner_sequence:
+        # 内部循环操作
+        
+        if condition:
+            # 符合条件的处理逻辑
+        else:
+            # 不符合条件的处理逻辑
+```
+以下是一个示例，演示如何使用嵌套的 for 循环和 if 语句：
+```python
+# 通过嵌套的 for 循环遍历了 colors 和 sizes 列表，并根据特定条件进行不同的输出
+colors = ['red', 'blue', 'green']
+sizes = ['S', 'M', 'L']
+
+for color in colors:
+    for size in sizes:
+        if color == 'blue' and size == 'M':
+            print("Found blue M: color =", color, "size =", size)
+        elif color == 'green':
+            print("Found green: color =", color, "size =", size)
+        else:
+            print("Not found: color =", color, "size =", size)
+```
+输出：
+```python
+Not found: color = red size = S
+Not found: color = red size = M
+Not found: color = red size = L
+Found blue M: color = blue size = M
+Not found: color = blue size = S
+Not found: color = blue size = L
+Found green: color = green size = S
+Found green: color = green size = M
+Found green: color = green size = L
+```
 ### 1.8 不限次的while循环
+#### 1.8.1 while循环
+while 循环是一个在给定条件为真的情况下重复执行代码块的控制结构。当条件不再满足时，循环停止。
+```python
+while condition:
+    # 循环体
+    
+    # 更新条件
+```
+在每次循环迭代开始前，首先检查条件是否为真。如果条件为真，则执行循环体中的代码。然后，根据需要更新条件。如果更新后的条件仍然为真，循环会继续进行，直到条件变为假才停止。
+```mermaid
+graph LR
+    A[开始] --> B(设置循环条件)
+    B --> |条件为真| C{循环体}
+    C --> |更新操作| D(返回到循环体)
+    D --> |条件为真| C
+    C --> |条件为假| E[结束]
+```
+```python
+# 使用 while 循环计算数字的阶乘
+num = 5
+factorial = 1
+
+while num > 0:
+    factorial *= num
+    num -= 1
+
+print("Factorial:", factorial)
+```
+在上述示例中，我们使用 while 循环来计算给定数字 num 的阶乘。循环体中，将当前的 num 与 factorial 相乘，并将结果保存在 factorial 中。然后，将 num 减去 1，以便在下一次迭代时处理下一个数字。循环会在 num 不大于 0 的条件下一直进行。
+输出：
+```python
+Factorial: 120
+```
+#### 1.8.2 while和for循环
+while 循环和 for 循环是两种常见的循环结构，它们在使用方式和适用场景上有一些区别。
+
+1. 使用方式：
+
+while 循环：在每次迭代开始前，先判断条件是否为真，如果条件为真，则执行循环体中的代码，然后更新条件。如果条件仍然为真，则继续下一次迭代。因此，while 循环适用于不确定迭代次数、需要根据条件动态控制循环的情况。
+for 循环：基于一个可迭代对象（如列表、元组或字符串）进行迭代，每次迭代从可迭代对象中取出一个元素，并执行循环体中的代码。for 循环适用于已知迭代次数的情况。
+
+2. 控制变量：
+
+while 循环：需要手动声明并更新控制条件的变量。在循环体内部需要显式地更新条件，以免无限循环。
+for 循环：无需手动声明或更新控制变量，迭代过程由 for 循环自动管理。每次迭代时，会自动从可迭代对象中选择一个元素作为循环变量，直到迭代完所有元素。
+
+3. 应用场景：
+
+<font color="red"> while 循环：适用于那些需要根据条件灵活控制迭代次数的情况。</font>例如，处理不确定条件的输入，实现游戏循环，或者在特定条件满足时执行某项任务。
+<font color="red"> for 循环：适用于已知迭代次数的情况。</font>当你需要对一个集合中的每个元素执行相同的操作时，使用 for 循环更加方便简洁。例如，遍历列表、计算序列的总和或平均值。
+以下是一个使用 while 循环和 for 循环的示例，展示了它们的不同之处：
+```python
+count = 0
+# 使用 while 循环
+while count < 5:
+    print("Count:", count)
+    count += 1
+print("-------------------")
+# 使用 for 循环
+for i in range(5):
+    print("Count:", i)
+```
+输出：
+```python
+Count: 0
+Count: 1
+Count: 2
+Count: 3
+Count: 4
+-------------------
+Count: 0
+Count: 1
+Count: 2
+Count: 3
+Count: 4
+```
+#### 1.8.3 break语句
+break 语句是一种在循环中使用的控制语句，用于立即终止当前所在的循环，跳出循环体。<font color="blue"> 当程序执行到 break 语句时，程序会立即退出循环，不再执行循环体中 break 语句之后的代码，而是继续执行循环体之后的代码。</font>
+break 语句通常与条件语句结合使用，用于根据特定条件提前跳出循环，避免不必要的迭代。
+```python
+while True:
+    user_input = input("请输入一个数字（输入'q'退出）：")
+
+    if user_input == 'q':
+        print("已退出循环")
+        break
+
+    number = int(user_input)
+    print("平方:", number**2)
+
+print("循环结束")
+```
+上述示例中，使用 while 循环来接受用户输入的数字，并计算输入数字的平方。如果用户输入的是字符 'q'，则使用 break 语句终止循环。否则，将用户输入的字符串转换为整数，并计算平方并输出。这个过程将持续进行，直到用户输入了 'q'。
+输出示例：
+```python
+请输入一个数字（输入'q'退出）：3
+平方: 9
+请输入一个数字（输入'q'退出）：5
+平方: 25
+请输入一个数字（输入'q'退出）：q
+已退出循环
+循环结束
+```
+#### 1.8.4 continue语句
+continue 语句是一种在循环中使用的控制语句，用于跳过当前迭代中剩余的代码，直接进入下一次迭代。<font color="blue"> 当程序执行到 continue 语句时，程序会立即停止当前迭代中 continue 语句之后的代码，并开始下一次循环迭代。</font>
+continue 语句通常与条件语句结合使用，用于在满足特定条件时跳过某些指令，只执行下一次迭代。
+```python
+for i in range(1, 11):
+    if i % 2 == 0:
+        continue
+    print(i)
+```
+上述示例中，使用 for 循环从 1 到 10 进行迭代。在每次迭代中，使用条件判断 if i % 2 == 0 来判断当前迭代的数值 i 是否为偶数。如果是偶数，那么 continue 语句将会跳过 print(i) 的执行，直接进行下一次迭代。如果是奇数，那么 print(i) 将会被执行。
+输出示例：
+```python
+1
+3
+5
+7
+9
+```
 ### 1.9 数据结构-列表
+#### 1.9.1 列表
+列表是Python中最常用的数据结构之一，用于存储一组有序的元素。
+1. 创建列表：使用方括号 [] 来创建一个空列表，或者在方括号内放置逗号分隔的元素来初始化一个含有元素的列表
+```python
+empty_list = []
+numbers = [1, 2, 3, 4, 5]
+fruits = ["apple", "banana", "orange"]
+mixed_list = [1, "apple", True, 2.5]
+```
+2. 一维列表:维列表是最简单的列表形式，只包含一组有序的元素。它是一个线性结构，元素按顺序排列，每个元素都有一个唯一的索引。
+```python
+# 创建一维列表
+numbers = [1, 2, 3, 4, 5]
+fruits = ["apple", "banana", "orange"]
+```
+一维列表中的元素按照索引从0开始递增，可以通过索引访问和修改其中的元素。
+```python
+print(numbers[0])  # 输出: 1
+numbers[2] = 10
+print(numbers)  # 输出: [1, 2, 10, 4, 5]
+```
+3. 二维列表：二维列表是一种表格形式的数据结构，其中的元素使用行和列进行排列。通常使用列表的嵌套来表示。
+```python
+# 创建二维列表
+matrix = [[1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9]]
+```
+在二维列表中，每个元素由两个索引确定，第一个索引表示所在的行，第二个索引表示所在的列。可以通过双重索引访问和修改元素。
+```python
+print(matrix[0][0])  # 输出: 1
+matrix[1][2] = 10
+print(matrix)  # 输出: [[1, 2, 3], [4, 5, 10], [7, 8, 9]]
+```
+#### 1.9.2 索引和切片
+1. 索引
+列表中的元素通过索引进行访问，索引表示元素在列表中的位置。<font color="red"> 索引从0开始，依次递增。</font>
+```python
+fruits = ['苹果', '香蕉', '橙子', '葡萄', '西瓜', '草莓', '梨子']
+
+print(fruits[0])    # 输出: '苹果'
+print(fruits[3])    # 输出: '葡萄'
+print(fruits[-1])   # 输出: '梨子'
+```
+2. 切片
+切片用于获取列表中的一个子列表，可以通过指定起始索引和结束索引来定义切片。切片操作符是冒号 :。
+在切片操作中，第一个索引（起始索引）指定了切片的起始位置（包含），第二个索引（结束索引）指定了切片的结束位置（不包含）。还可以提供第三个索引（步长），用于指定切片的步长，默认为1。
+```python
+fruits = ['苹果', '香蕉', '橙子', '葡萄', '西瓜', '草莓', '梨子']
+print(fruits[2:5])    # 输出: ['橙子', '葡萄', '西瓜']（包含起始索引2，不包含结束索引5）
+print(fruits[:3])     # 输出: ['苹果', '香蕉', '橙子']（从开头到索引2的子列表）
+print(fruits[4:])     # 输出: ['西瓜', '草莓', '梨子']（从索引4到末尾的子列表）
+print(fruits[::2])    # 输出: ['苹果', '橙子', '西瓜', '梨子']（每隔一个元素取一个子列表）
+print(fruits[::-1])   # 输出: ['梨子', '草莓', '西瓜', '葡萄', '橙子', '香蕉', '苹果']（倒序排列的列表）
+```
+#### 1.9.3 列表的操作
+1. 列表的长度
+列表的长度是指列表中元素的个数。在Python中，可以使用内置函数len()来获取列表的长度。
+```python
+my_list = [1, 2, 3, 4, 5]
+length = len(my_list)
+print(length)  # 输出：5
+```
+对于二维列表，我们可以分别获取其外层列表和内层列表的长度。
+外层列表的长度表示二维列表中含有多少个内层列表，可以使用len()函数来获取外层列表的长度。而内层列表的长度表示每个内层列表中含有多少个元素，同样可以使用len()函数来获取内层列表的长度。
+```python
+my_list = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+outer_length = len(my_list)
+print("外层列表长度:", outer_length)  # 输出：外层列表长度: 3
+
+inner_length = len(my_list[0])
+print("内层列表长度:", inner_length)  # 输出：内层列表长度: 3
+```
+2. 修改元素
+- 使用索引修改单个元素
+```python
+# 将索引为2的元素从原来的3修改为10
+my_list = [1, 2, 3, 4, 5]
+my_list[2] = 10
+print(my_list)  # 输出：[1, 2, 10, 4, 5]
+```
+- 使用切片修改多个元素
+```python
+# 将索引为1到3的元素从原来的[2, 3, 4]修改为[10, 20, 30]
+my_list = [1, 2, 3, 4, 5]
+my_list[1:4] = [10, 20, 30]
+print(my_list)  # 输出：[1, 10, 20, 30, 5]
+```
+3. 添加元素
+- 使用append()方法添加单个元素到列表末尾
+```python
+# 使用append()方法将元素4添加到列表的末尾
+my_list = [1, 2, 3]
+my_list.append(4)
+print(my_list)  # 输出：[1, 2, 3, 4]
+```
+- 使用extend()方法添加多个元素到列表末尾
+```pyhton
+# 使用extend()方法将包含多个元素的列表添加到原始列表的末尾
+my_list = [1, 2, 3]
+my_list.extend([4, 5, 6])
+print(my_list)  # 输出：[1, 2, 3, 4, 5, 6]
+```
+- 使用"+"操作符连接两个列表
+```python
+my_list = [1, 2, 3]
+new_elements = [4, 5, 6]
+my_list = my_list + new_elements
+print(my_list)  # 输出：[1, 2, 3, 4, 5, 6]
+```
+4. 检索元素
+```python
+my_list = [1, 2, 3, 4, 5]
+
+# 使用 in 运算符检查元素是否存在
+is_present = 3 in my_list
+print(is_present)  # 输出：True
+
+is_present = 6 in my_list
+print(is_present)  # 输出：False
+
+# 使用 not in 运算符检查元素是否不存在
+is_absent = 3 not in my_list
+print(is_absent)  # 输出：False
+
+is_absent = 6 not in my_list
+print(is_absent)  # 输出：True
+```
+5. 删除元素
+- 使用del语句删除指定索引处的元素
+```python
+my_list = [1, 2, 3, 4, 5]
+del my_list[2]
+print(my_list)  # 输出：[1, 2, 4, 5]
+```
+- 使用remove()方法删除列表中的指定元素
+```python
+my_list = [1, 2, 3, 4, 5]
+my_list.remove(3)
+print(my_list)  # 输出：[1, 2, 4, 5]
+```
+- 使用pop()方法删除指定索引处的元素，并将其返回
+```python
+my_list = [1, 2, 3, 4, 5]
+removed_element = my_list.pop(2)
+print(removed_element)  # 输出：3
+print(my_list)  # 输出：[1, 2, 4, 5]
+```
+*del语句适合根据索引删除元素，remove()方法适合根据元素的值删除元素，而pop()方法既可以根据索引删除元素，又可以将其返回。*
+6. 列表排序
+- 使用列表的sort()方法对列表进行排序
+```python
+# 使用sort()方法对列表进行排序。结果会直接修改原始列表，使其按升序排列。
+my_list = [3, 1, 4, 2, 5]
+my_list.sort()
+print(my_list)  # 输出：[1, 2, 3, 4, 5]
+```
+- 使用内置的sorted()函数对列表进行排序
+```python
+# 使用sorted()函数对列表进行排序。sorted()函数会返回一个新的已排序的列表，而不会修改原始列表。
+my_list = [3, 1, 4, 2, 5]
+sorted_list = sorted(my_list)
+print(sorted_list)  # 输出：[1, 2, 3, 4, 5]
+```
+<font color="red"> 需要注意的是，默认情况下，排序是按数字或字母的升序进行的。如果需要按降序进行排序，可以使用reverse=True参数。</font>
+
+```python
+# 将列表按降序排序
+my_list = [3, 1, 4, 2, 5]
+my_list.sort(reverse=True)
+print(my_list)  # 输出：[5, 4, 3, 2, 1]
+
+sorted_list = sorted(my_list, reverse=True)
+print(sorted_list)  # 输出：[5, 4, 3, 2, 1]
+```
+#### 1.9.4 列表推导式
+列表推导式（List Comprehension）是一种简洁的创建新列表的方法，它允许您使用简洁的语法从一个或多个现有列表中生成新列表。
+
+列表推导式的基本语法如下：
+`new_list = [expression for item in iterable if condition]`
+其中：
+*expression 是对每个 item 执行的操作或表达式，用于生成新列表中的元素。
+item 是迭代过程中从 iterable 中取出的每个元素。
+iterable 是一个可迭代的对象，例如列表、字符串等。
+if condition 是可选的条件表达式，用于过滤元素。只有满足条件的元素才会被添加到新列表中。*
+```python
+# 将一个列表中的每个元素乘以2并生成新列表
+old_list = [1, 2, 3, 4, 5]
+new_list = [x * 2 for x in old_list]
+print(new_list)  # 输出: [2, 4, 6, 8, 10]
+
+# 从一个字符串中提取出所有大写字母并生成新列表
+string = "Hello World"
+new_list = [char for char in string if char.isupper()]
+print(new_list)  # 输出: ['H', 'W']
+
+# 生成一个包含1到10之间偶数的新列表
+new_list = [x for x in range(1, 11) if x % 2 == 0]
+print(new_list)  # 输出: [2, 4, 6, 8, 10]
+```
+#### 1.9.5 常见函数（数字列表的统计方法）
+1. len(): 获取列表中元素的个数
+```python
+my_list = [1, 2, 3, 4, 5]
+length = len(my_list)
+print(length)  # 输出: 5
+```
+2. sum(): 计算列表中所有元素的和
+```python
+my_list = [1, 2, 3, 4, 5]
+total = sum(my_list)
+print(total)  # 输出: 15
+```
+3. max(): 获取列表中的最大值
+```python
+my_list = [1, 2, 3, 4, 5]
+maximum = max(my_list)
+print(maximum)  # 输出: 5
+```
+4. min(): 获取列表中的最小值
+```python
+my_list = [1, 2, 3, 4, 5]
+minimum = min(my_list)
+print(minimum)  # 输出: 1
+```
+5. sorted(): 对列表进行排序，并返回一个新的排序后的列表。
+```python
+my_list = [5, 2, 1, 4, 3]
+sorted_list = sorted(my_list)
+print(sorted_list)  # 输出: [1, 2, 3, 4, 5]
+```
+6. mean(): 计算列表中所有元素的平均值。需要导入 statistics 模块
+```python
+import statistics
+
+my_list = [1, 2, 3, 4, 5]
+average = statistics.mean(my_list)
+print(average)  # 输出: 3
+```
+7. median(): 计算列表中所有元素的中位数。需要导入 statistics 模块。
+```python
+import statistics
+
+my_list = [1, 2, 3, 4, 5]
+median_value = statistics.median(my_list)
+print(median_value)  # 输出: 3
+```
 ### 1.10 数据结构-字典
+#### 1.10.1
+
 ### 1.11 数据结构-元组和集合
 ### 1.12 精简代码利器-函数
 ### 1.13 玩转文件
