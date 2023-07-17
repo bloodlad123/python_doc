@@ -1426,13 +1426,660 @@ median_value = statistics.median(my_list)
 print(median_value)  # 输出: 3
 ```
 ### 1.10 数据结构-字典
-#### 1.10.1
+#### 1.10.1 字典的定义
+字典是一种无序的数据结构，用于存储键-值（key-value）对。字典通过键来索引和访问值，而不是使用传统的数字索引。
+在Python中，字典使用花括号 {} 来定义，并使用冒号 : 来分隔键和值。每个键-值对之间使用逗号 , 分隔。
+下面是一个字典的定义示例：
+```python
+my_dict = {"name": "Alice", "age": 25, "city": "Beijing"}
+```
+在上述示例中，我们定义了一个名为 my_dict 的字典，其中包含三个键-值对。键 "name" 对应的值是 "Alice"，键 "age" 对应的值是 25，键 "city" 对应的值是 "Beijing"。
+<font color="red"> 字典中的键必须是唯一的，而值可以是任意类型的对象，例如字符串、整数、列表等。</font>
 
+可以通过指定键来访问和操作字典中的值。例如，要获取字典中键 "name" 对应的值，可以使用以下方式：
+```python
+name_value = my_dict["name"]
+print(name_value)  # 输出: "Alice"
+```
+#### 1.10.2 字典的增删查改
+1. 增加键-值对：
+可以通过直接赋值给新的键来添加新的键-值对，或者使用 update() 方法添加多个键-值对。
+```python
+my_dict = {}  # 创建空字典
+
+my_dict["name"] = "Alice"  # 添加单个键-值对
+my_dict["age"] = 25
+my_dict["city"] = "Beijing"
+
+# 或者使用 update() 方法添加多个键-值对
+my_dict.update({"gender": "female", "occupation": "engineer"})
+```
+2. 删除键-值对：
+可以使用 del 关键字删除指定的键及其对应的值，或者使用 pop() 方法删除指定键，并返回其对应的值。
+```python
+del my_dict["age"]  # 删除键 "age" 及其对应的值
+
+popped_value = my_dict.pop("city")  # 删除键 "city" 并返回其对应的值
+```
+3. 查找键对应的值：
+可以使用键来访问字典中对应的值，如果键不存在，会引发 KeyError 异常。另一种方法是使用 get() 方法，如果键不存在，可以返回一个默认值。
+```python
+name_value = my_dict["name"]  # 通过键获取值
+
+age_value = my_dict.get("age")  # 通过 get() 方法获取值，如果键不存在返回 None
+
+occupation_value = my_dict.get("occupation", "N/A")  # 获取值并指定默认值
+```
+4. 修改字典中的值：
+可以通过赋值给指定的键来修改字典中对应的值。
+```python
+my_dict["name"] = "Bob"  # 修改键 "name" 对应的值
+```
+#### 1.10.3 字典的相关方法
+1. keys() 方法：
+该方法返回一个包含字典所有键的可迭代对象。
+```python
+my_dict = {"name": "Alice", "age": 25, "city": "Beijing"}
+keys = my_dict.keys()
+print(keys)  # 输出：dict_keys(['name', 'age', 'city'])
+```
+2. values() 方法：
+该方法返回一个包含字典所有值的可迭代对象。
+```python
+my_dict = {"name": "Alice", "age": 25, "city": "Beijing"}
+values = my_dict.values()
+print(values)  # 输出：dict_values(['Alice', 25, 'Beijing'])
+```
+3. items() 方法：
+该方法返回一个包含字典所有键值对的可迭代对象，每个键值对表示为一个元组。
+```python
+my_dict = {"name": "Alice", "age": 25, "city": "Beijing"}
+items = my_dict.items()
+print(items)  # 输出：dict_items([('name', 'Alice'), ('age', 25), ('city', 'Beijing')])
+```
+4. copy() 方法：
+该方法创建并返回一个字典的浅拷贝副本。
+```python
+my_dict = {"name": "Alice", "age": 25, "city": "Beijing"}
+new_dict = my_dict.copy()
+```
+5. clear() 方法：
+该方法清空字典中所有的键-值对，使其变为空字典。
+```python
+my_dict = {"name": "Alice", "age": 25, "city": "Beijing"}
+my_dict.clear()
+print(my_dict)  # 输出：{}
+```
 ### 1.11 数据结构-元组和集合
+#### 1.11.1 元组
+元组（Tuple）是Python中的一种有序、不可变的数据类型。与列表相似，但元组的元素不能被修改。元组使用圆括号 () 表示，元素之间用逗号分隔。
+以下是一些关于元组的常用操作和特点：
+
+1. 创建元组：
+可以使用圆括号 () 来创建一个元组，并将元素用逗号分隔。
+```python
+my_tuple = (1, 2, 3, "apple", "banana")
+```
+2. 访问元组元素：
+可以使用索引来访问元组中的元素，索引从0开始。
+```python
+first_element = my_tuple[0]  # 访问第一个元素，值为1
+```
+3. 元组的不可变性：
+元组的元素不能被修改、添加或删除。一旦创建，元组的元素不能被更改。
+```python
+my_tuple[0] = 5  # 错误! 元组的元素无法修改
+```
+4. 元组的长度和切片：
+使用 len() 函数获取元组的长度，并可以使用切片操作访问指定范围的元素。
+```python
+length = len(my_tuple)  # 获取元组的长度
+
+sliced_tuple = my_tuple[1:4]  # 切片，获取索引1到3的元素，结果为 (2, 3, "apple")
+```
+5. 元组的解包：
+可以将元组的元素解包（拆分）到多个变量中。
+```python
+a, b, c, d, e = my_tuple  # 将元组的元素分别赋值给变量 a, b, c, d, e
+```
+6. 元组的拼接和重复：
+可以使用 + 运算符来拼接两个元组，使用 * 运算符将元组重复多次。
+```python
+tuple1 = (1, 2, 3)
+tuple2 = (4, 5, 6)
+merged_tuple = tuple1 + tuple2  # 拼接元组，结果为 (1, 2, 3, 4, 5, 6)
+
+repeated_tuple = tuple1 * 3  # 元组重复三次，结果为 (1, 2, 3, 1, 2, 3, 1, 2, 3)
+```
+#### 1.11.2 zip()函数
+zip() 函数接受任意多个可迭代对象作为参数，可以是列表、元组、集合等。它会将这些可迭代对象中的元素逐个配对组成元组，然后返回一个生成器对象，每次迭代产生一个元组。
+需要注意以下几点：
+- 如果传入的可迭代对象的长度不一致，zip() 函数会以最短的可迭代对象长度为准，超出部分的元素将被忽略。
+- zip() 函数返回的是一个迭代器，可以使用 list() 函数将其转换为列表。
+*（迭代器（Iterator）是一个用于遍历可迭代对象的对象。
+迭代器的优点在于它可以在遍历过程中逐个获取元素，而不需要事先将所有的元素放入内存中。这对于处理大型数据集或者无法一次性加载到内存的数据非常有用。）*
+```python
+numbers = [1, 2, 3]
+letters = ['a', 'b']
+result = zip(numbers, letters)
+print(list(result))  # 输出：[(1, 'a'), (2, 'b')]
+```
+zip() 函数常用于需要同时迭代多个可迭代对象的场景，例如需要同时遍历两个列表或元组，并进行相关操作。
+```python
+numbers = [1, 2, 3]
+letters = ['a', 'b', 'c']
+
+for number, letter in zip(numbers, letters):
+    print(f"Number: {number}, Letter: {letter}")
+```
+输出：
+```python
+Number: 1, Letter: a
+Number: 2, Letter: b
+Number: 3, Letter: c
+```
+#### 1.11.3 集合
+在 Python 中，集合是一个内置的数据类型，使用花括号 {} 或者 set() 函数来创建。以下是创建集合的示例：
+```python
+# 使用花括号创建集合
+set1 = {1, 2, 3, 4, 5}
+
+# 使用set()函数创建集合
+set2 = set([1, 2, 3, 4, 5])
+
+print(set1)  # 输出：{1, 2, 3, 4, 5}
+print(set2)  # 输出：{1, 2, 3, 4, 5}
+```
+需要注意的是，创建空集合时必须使用 set() 函数，因为 {} 创建的是一个空字典。
+```python
+empty_set = {}
+print(type(empty_set))  # 输出：dict（字典类型）
+
+empty_set = set()
+print(type(empty_set))  # 输出：set（集合类型）
+```
+集合的主要特点包括：
+1. 无序性：集合中的元素没有固定的顺序，无法通过索引访问。
+2. 唯一性：集合中的元素是唯一的，不会出现重复项。如果在创建集合时有重复的元素，那么最终集合中只会保留一个副本。
+3. 可变性：集合是可变的，可以添加、删除和修改元素。但是集合本身是不可哈希的，所以不能作为字典的键。
+
+集合提供了一系列的方法来进行常见的集合操作，例如并集、交集、差集等。以下是一些常用的集合操作示例：
+```python
+set1 = {1, 2, 3}
+set2 = {3, 4, 5}
+
+# 并集
+union_set = set1.union(set2)
+print(union_set)  # 输出：{1, 2, 3, 4, 5}
+
+# 交集
+intersection_set = set1.intersection(set2)
+print(intersection_set)  # 输出：{3}
+
+# 差集
+difference_set = set1.difference(set2)
+print(difference_set)  # 输出：{1, 2}
+
+# 对称差集
+symmetric_difference_set = set1.symmetric_difference(set2)
+print(symmetric_difference_set)  # 输出：{1, 2, 4, 5}
+```
+除了常见的集合操作（如并集、交集、差集等），在 Python 中，集合还有一些其他有用的方法和属性。
+
+以下是一些常用的集合方法和属性：
+1. add(element): 向集合中添加一个元素。如果元素已经存在于集合中，则不会重复添加。
+```python
+set1 = {1, 2, 3}
+set1.add(4)
+print(set1)  # 输出：{1, 2, 3, 4}
+
+set1.add(1)  # 重复元素
+print(set1)  # 输出：{1, 2, 3, 4}
+```
+2. remove(element): 从集合中移除指定元素。如果元素不存在于集合中，会引发 KeyError 异常。
+```python
+set1 = {1, 2, 3}
+set1.remove(2)
+print(set1)  # 输出：{1, 3}
+
+set1.remove(4)  # 不存在的元素
+# 抛出 KeyError 异常：KeyError: 4
+```
+3. discard(element): 从集合中移除指定元素，如果元素不存在于集合中，则不会引发异常。
+```python
+set1 = {1, 2, 3}
+set1.discard(2)
+print(set1)  # 输出：{1, 3}
+
+set1.discard(4)  # 不存在的元素
+print(set1)  # 输出：{1, 3}，不会引发异常
+```
+4. pop(): 随机移除并返回集合中的一个元素。由于集合是无序的，因此无法预测将返回哪个元素。
+```python
+set1 = {1, 2, 3}
+element = set1.pop()
+print(element)  # 输出：1
+print(set1)  # 输出：{2, 3}
+```
+5. clear(): 移除集合中的所有元素，使其变为空集合。
+```python
+set1 = {1, 2, 3}
+set1.clear()
+print(set1)  # 输出：set()
+```
+6. len(set): 返回集合中元素的数量。
+```python
+set1 = {1, 2, 3}
+print(len(set1))  # 输出：3
+```
+7. set.copy(): 创建并返回集合的副本。
+```python
+set1 = {1, 2, 3}
+set2 = set1.copy()
+print(set2)  # 输出：{1, 2, 3}
+```
+8. set.isdisjoint(other_set): 检查两个集合是否不相交，即是否不存在共同的元素。如果不相交，则返回 True；否则返回 False。
+```python
+set1 = {1, 2, 3}
+set2 = {4, 5, 6}
+set3 = {3, 4, 5}
+
+print(set1.isdisjoint(set2))  # 输出：True
+print(set1.isdisjoint(set3))  # 输出：False
+```
+**集合与字典的区别：**
+
+|  |  符号 |   元素| 是否可以重复  |
+| :------------: | :------------: | :------------: | :------------: |
+| <b>字典</b> | {}  |  由键值对组成 <br> Dict={"a":1 ,"b":2 ,"c":3} | 键是唯一的,不可重复  |
+| <b>集合</b>  |  {} | 由单个元素组成 <br>  Set ={a,1,b,2,c,3)  | 元素不可重复  |
+
+#### 1.11.4 相互转换
+可以使用以下方法将列表（List）、元组（Tuple）和字典（Dictionary）相互转换。
+1. 列表和元组之间的转换
+*将列表转换为元组：使用tuple()函数来将列表转换为元组。*
+```python
+my_list = [1, 2, 3, 4, 5]
+my_tuple = tuple(my_list)
+print(my_tuple)
+```
+输出：
+```python
+(1, 2, 3, 4, 5)
+```
+*将元组转换为列表：使用list()函数来将元组转换为列表。*
+```python
+my_tuple = (1, 2, 3, 4, 5)
+my_list = list(my_tuple)
+print(my_list)
+```
+输出：
+```python
+[1, 2, 3, 4, 5]
+```
+2. 列表和字典之间的转换
+*将列表转换为字典：使用dict()函数来将列表转换为字典。在转换时，要求列表中的元素必须成对出现，其中奇数索引的元素作为字典的键，偶数索引的元素作为字典的值。*
+```python
+my_list = ['a', 1, 'b', 2, 'c', 3]
+my_dict = dict(zip(my_list[0::2], my_list[1::2]))
+print(my_dict)
+```
+输出：
+```python
+{'a': 1, 'b': 2, 'c': 3}
+```
+*将字典转换为列表：使用list()函数来将字典转换为列表。转换结果是字典的键组成的列表。*
+```python
+my_dict = {'a': 1, 'b': 2, 'c': 3}
+my_list = list(my_dict.keys())
+print(my_list)
+```
+输出：
+```python
+['a', 'b', 'c']
+```
+<font color="red"> 请注意，字典是无序的，转换为列表时并不保证元素的顺序与字典中的顺序一致。</font>
+
+|   | 符号  | 有序  | 可变  | 索引  | 重复元素  |
+| :------------: | :------------: | :------------: | :------------: | :------------: | :------------: |
+|  <b>列表</b> | [] |  <span style="font-size: 20px;color: green;">&#10004;</span> | <span style="font-size: 20px;color: green;">&#10004;</span> | <span style="font-size: 20px;color: green;">&#10004;</span>  |  <span style="font-size: 20px;color: green;">&#10004;</span> |
+|  <b>元组</b> |  () |   <span style="font-size: 20px;color: green;">&#10004;</span>  |  <span style="color: red;">&#10060;</span> | <span style="font-size: 20px;color: green;">&#10004;</span> | <span style="font-size: 20px;color: green;">&#10004;</span> |
+|  <b>字典</b> | {}  |  <span style="color: red;">&#10060;</span> |  <span style="font-size: 20px;color: green;">&#10004;</span> | <span style="font-size: 20px;color: green;">&#10004;</span>  | <span style="color: red;">&#10060;</span> |
+|  <b>集合</b> |  {} |  <span style="color: red;">&#10060;</span> |  <span style="font-size: 20px;color: green;">&#10004;</span> | <span style="color: red;">&#10060;</span> | <span style="color: red;">&#10060;</span>  |
+
 ### 1.12 精简代码利器-函数
-### 1.13 玩转文件
-### 1.14 精简代码神器-模块
-### 1.15 项目实战
+计算roi并根据roi判断是否亏本的功能代码
+```python
+sale = 20000
+cost=10000
+roi = sale/cost
+print(roi)
+if roi < 1:
+    print("亏本啦")
+elif roi == 1:
+    print("刚好回本啦")
+else:
+    print("赚钱啦")
+```
+输出：
+```python
+2.0
+赚钱啦
+```
+#### 1.12.1 函数的定义与调用
+在Python中，我们可以使用 def 关键字来定义函数，并使用函数名和参数列表来调用函数。下面是函数定义和调用的基本语法：
+```python
+# 定义函数
+def function_name(parameter1, parameter2, ...):
+    # 函数体（执行的代码块）
+    # 可以包含任意数量的语句
+
+# 调用函数
+function_name(argument1, argument2, ...)
+```
+在上述代码中，我们使用 def 关键字后面跟着函数名，然后是一对圆括号，括号内可以包含零个或多个参数，这些参数是函数的输入。函数体是由缩进的代码块组成，表示函数要执行的操作。当我们需要使用函数时，可以通过函数名后跟着一对圆括号，并传递相应的参数值作为函数的实参，这些参数值被称为实际参数。
+<font color = "red"> 定义几个参数，调用时传入几个值,参数传多了或者传少了都会报错，值与参数位置一一对应</font>
+
+```python
+# ROI计算
+def ROI(cost,sale):
+    roi = sale/cost # ROI(投入产出比)=产出/投入
+    print(roi)
+    if roi < 1:
+        print("亏本啦")
+    elif roi == 1:
+        print("刚好回本啦")
+    else:
+        print("赚钱啦")
+# 调用函数
+ROI(10000,20000)
+```
+输出：
+```python
+2.0
+赚钱啦
+```
+
+#### 1.12.2 函数的参数
+定义函数时，我们可以先给cost设置默认值10000，然后在调用函数时，投放成本不需要改变，就不给cost传值。
+```python
+def ROI(sale,cost = 10000):
+    roi = sale/cost # ROI(投入产出比)=产出/投入
+    print(roi)
+    if roi < 1:
+        print("亏本啦")
+    elif roi == 1:
+        print("刚好回本啦")
+    else:
+        print("赚钱啦")
+# 调用函数
+ROI(20000)
+```
+输出：
+```python
+2.0
+赚钱啦
+```
+如果有特殊情况了，就重新传值，当成本变为20000的时候，我们就对cost重新赋值：
+```python
+ROI(20000,cost = 20000)
+```
+输出：
+```python
+1.0
+刚好回本啦
+```
+#### 1.12.3 return语句
+return 语句用于在函数内部返回结果，并将结果传递给函数的调用者。当函数执行到 return 语句时，它会立即结束函数的执行，并将指定的值作为函数的返回值返回。
+以下是 return 语句的基本语法：
+```python
+return expression
+```
+*expression 是要返回的值或表达式*
+在函数中使用 return 语句可以完成以下几个任务：
+1. 返回值：通过 return 语句返回函数的计算结果。
+2. 终止函数：当 return 语句执行时，函数会立即结束，不再执行后续的代码。
+3. 多个返回值：可以返回多个值，以元组、列表或其他数据结构的形式返回。
+```python
+# 加入return语句，返回结果，参与之后的运算
+def ROI(sale,cost = 10000):
+    roi = sale/cost # ROI(投入产出比)=产出/投入
+    return roi
+
+    if roi < 1:
+        print("亏本啦")
+    elif roi == 1:
+        print("刚好回本啦")
+    else:
+        print("赚钱啦")
+# 调用函数
+print(ROI(20000) + 2)
+```
+输出：
+```python
+4.0
+```
+```python
+# 把return语句放在分支结构的后面
+def ROI(sale,cost = 10000):
+    roi = sale/cost # ROI(投入产出比)=产出/投入
+    if roi < 1:
+        print("亏本啦")
+    elif roi == 1:
+        print("刚好回本啦")
+    else:
+        print("赚钱啦")
+    return roi
+# 调用函数
+print(ROI(20000) + 2)
+```
+输出：
+```python
+赚钱啦
+4.0
+```
+#### 1.12.4 变量的作用域
+在Python中，变量的作用域指的是变量在程序中可访问的范围。Python中存在以下几种变量作用域：
+1. 全局作用域（Global scope）：在整个程序中定义的变量具有全局作用域，可以在程序的任何地方被访问。
+2. 局部作用域（Local scope）：在函数或代码块内部定义的变量具有局部作用域，只能在函数或代码块内部被访问。
+3. 嵌套作用域（Enclosing scope）：在嵌套函数中，内部函数可以访问外部函数中的变量。外部函数中的变量对内部函数来说具有嵌套作用域。
+4. 内置作用域（Built-in scope）：Python内置的函数和变量拥有内置作用域，它们可以在任何地方被访问。
+*当使用一个变量时，Python解释器首先在局部作用域中查找该变量，如果找不到，则继续在嵌套作用域中查找，再找不到则在全局作用域中查找，最后在内置作用域中查找。如果仍然找不到，则会引发 NameError。*
+以下是一个示例，展示了变量作用域的概念
+```python
+x = 10  # 全局变量
+
+def foo():
+    y = 20  # 局部变量
+    print(x)  # 可以访问全局变量 x
+    print(y)  # 可以访问局部变量 y
+
+foo()
+
+def bar():
+    z = 30  # 局部变量
+    print(x)  # 可以访问全局变量 x
+    print(z)  # 可以访问局部变量 z
+
+bar()
+
+def outer():
+    a = 40  # 外部函数的局部变量
+
+    def inner():
+        b = 50  # 内部函数的局部变量
+        print(a)  # 可以访问外部函数的局部变量 a
+        print(b)  # 可以访问内部函数的局部变量 b
+
+    inner()
+
+outer()
+
+def baz():
+    print(len("Hello"))  # 可以访问内置作用域中的函数 len()
+
+baz()
+```
+在这个例子中，x 是全局变量，在 foo() 和 bar() 函数中都可以访问。y 和 z 是函数内部的局部变量，只能在相应的函数内部访问。a 是外部函数 outer() 的局部变量，在 inner() 函数中可以访问。b 是内部函数 inner() 的局部变量。len() 是内置函数，可以在任何地方访问。
+需要注意的是，在函数内部，如果要修改全局变量的值，需要使用 global 关键字进行声明，以告诉解释器该变量是全局变量。
+```python
+a = 123 # 全局变量
+def ROI(sale,cost):
+    roi = sale/cost # ROI(投入产出比)=产出/投入
+ROI(10000,20000)
+print(a) # out:123
+```
+```python
+# 在函数内部将变量a修改为456
+a = 123 # 全局变量
+def ROI(sale,cost):
+    roi = sale/cost # ROI(投入产出比)=产出/投入
+    global a 
+    a = 456
+ROI(10000,20000)
+print(a) # out:456
+```
+```python
+# 在函数内部使用global声明a为全局变量，然后再将456赋值给a
+a = 123 # 全局变量
+def ROI(sale,cost):
+    roi = sale/cost # ROI(投入产出比)=产出/投入
+    a = 456
+ROI(10000,20000)
+print(a) # out:123
+```
+#### 1.12.5 lambda匿名函数
+在Python中，lambda 是用于创建匿名函数的关键字。匿名函数是一种没有函数名的小型函数，通常用于简化代码或作为函数参数传递。
+lambda 函数的语法格式如下：
+```python
+lambda arguments: expression
+```
+- arguments 是函数的参数列表，可以是零个或多个参数。
+- expression 是函数的返回值表达式。
+```python
+ROI = lambda sale,cost : sale/cost
+print(ROI(20000,10000))
+```
+#### 1.12.6 sorted函数 --参数key
+sorted() 函数是用于对可迭代对象进行排序的内置函数。它接受一个可迭代对象作为输入，并返回一个新的已排序的列表（或可迭代对象）。
+sorted() 函数还提供了一个可选的参数 key，用于指定排序的依据。key 参数接受一个函数，该函数将应用于可迭代对象中的每个元素，并返回一个用于排序的值。根据这个值进行排序后，返回排序后的结果。
+以下是使用 key 参数进行排序的示例：
+```python
+salary_1ist=[14623,19860,11378,12033]
+#升序
+sorted(salary_1ist) # out: [11378, 12033, 14623, 19860]
+``` 
+```python
+salary_1ist=[14623,19860,11378,12033]
+#降序
+sorted(salary_1ist,reverse = True) # out: [19860, 14623, 12033, 11378]
+```
+```python
+# 将列表salary按照月份，即元组中的第一个值，进行升序
+salary=[(1,14623),(3,19860),(2,11378),(4,12033)]
+sorted(salary,key = lambda x:x[0]) # out: [(1, 14623), (2, 11378), (3, 19860), (4, 12033)]
+```
+```python
+# 想按照月薪排序，只需要把lambda函数中的x[0]改为x[1]
+salary=[(1,14623),(3,19860),(2,11378),(4,12033)]
+sorted(salary,key = lambda x:x[1]) # out: [(2, 11378), (4, 12033), (1, 14623), (3, 19860)]
+```
+```python
+# 根据字符串长度排序
+fruits = ['apple', 'banana', 'cherry', 'date']
+sorted_fruits = sorted(fruits, key=len)
+print(sorted_fruits)  # 输出：['date', 'apple', 'banana', 'cherry']
+```
+### 1.13 类的相关知识
+#### 1.13.1 类相关概念的介绍
+类是用来创建对象的模板，它定义了对象的属性（数据）和行为（方法）。下面是一些与类相关的概念的介绍
+1. 对象（Object）：对象是类的实例。它具有类定义的属性和方法，并可以通过创建类的实例来访问和操作这些属性和方法。
+2. 类（Class）：类是一个代码模板，用于创建对象。它定义了对象的属性和方法。类是对象的蓝图，描述了对象应该具有的特征和行为。
+3. 属性（Attribute）：属性是类中定义的数据。它们描述了对象的状态或特征。每个对象可以具有不同的属性值，但它们都属于同一个类，并且具有相同的属性名称。
+4. 方法（Method）：方法是类中定义的函数。它们用于执行特定的操作或实现特定的行为。方法可以访问和操作对象的属性。
+5. 实例化（Instantiation）：实例化是创建类的实例（对象）的过程。通过使用类名后跟一对圆括号，可以实例化一个类，并创建一个对象。
+6. 继承（Inheritance）：继承是面向对象编程中的一种机制，它允许一个类（称为子类或派生类）继承另一个类（称为父类或基类）的属性和方法。子类可以继承父类的特征，并可以添加自己的特殊特征或重写继承的方法。
+7. 封装（Encapsulation）：封装是面向对象编程的概念，它将相关的属性和方法封装在一个单独的实体（类）中，并通过访问修饰符来控制对这些属性和方法的访问。封装可以隐藏实现的细节，提供了更好的代码组织和模块化。
+8. 多态（Polymorphism）：多态是指一个对象可以具有多种形态或类型。在多态中，可以使用父类的引用来引用子类的对象，从而实现不同对象的统一处理。
+
+#### 1.13.2 类和对象的创建
+在Python中，可以使用class关键字来创建一个类。类是对象的蓝图，用于定义对象的属性和行为。以下是创建类的基本语法：
+```python
+class ClassName:
+    def __init__(self, parameter1, parameter2, ...):
+        # 构造函数，用于初始化对象的属性
+        self.attribute1 = parameter1
+        self.attribute2 = parameter2
+        # 其他属性的初始化
+
+    def method1(self, parameter1, parameter2, ...):
+        # 方法1的实现
+
+    def method2(self, parameter1, parameter2, ...):
+        # 方法2的实现
+
+    # 其他方法的定义
+```
+#### 1.13.3 类的属性和方法
+1. 属性（Attributes）：
+
+<font color="blue"> 属性是类中定义的变量 </font>，用于存储对象的状态或特征。
+在类的构造函数（通常是__init__方法）或其他方法中，可以使用self.attribute_name语法来定义和初始化属性。
+属性可以在类的任何方法中使用，也可以在类外部通过对象进行访问。
+例如，一个Person类可能有name和age属性：
+
+```python
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+```
+2. 方法（Methods）：
+
+<font color="blue"> 方法是类中定义的函数 </font>，用于定义对象的行为或实现特定的功能。
+方法可以访问和操作对象的属性。
+方法的第一个参数通常是self，表示方法的调用者对象。
+通过使用self.attribute_name语法，方法可以访问对象的属性。
+例如，一个Person类可能有一个say_hello方法：
+
+```python
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def say_hello(self):
+        print(f"Hello, my name is {self.name} and I'm {self.age} years old.")
+```
+3. 访问属性和调用方法：
+
+创建类的实例后，可以使用点号（.）语法来访问对象的属性和调用对象的方法。
+例如，使用person.name可以访问Person对象的name属性，而使用person.say_hello()可以调用Person对象的say_hello方法。
+下面是一个示例，展示了类的属性和方法的使用：
+```python
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+
+    def get_area(self):
+        return 3.14 * self.radius**2
+
+    def set_radius(self, new_radius):
+        self.radius = new_radius
+
+# 创建Circle类的实例
+circle = Circle(5)
+print(circle.radius)  # 输出：5
+
+circle.set_radius(7)
+print(circle.radius)  # 输出：7
+
+area = circle.get_area()
+print(area)  # 输出：153.86
+```
+### 1.14 玩转文件
+### 1.15 精简代码神器-模块
+### 1.16 项目实战
 
 ## 2. Python自动化办公
 *主要解决Excel和word处理数据效率低以及步骤繁杂的问题。*
