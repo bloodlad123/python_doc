@@ -2078,7 +2078,300 @@ area = circle.get_area()
 print(area)  # 输出：153.86
 ```
 ### 1.14 玩转文件
+#### 1.14.1 打开文件
+使用 with open() 可以打开文件，并在代码块执行完毕后自动关闭文件，确保资源被正确释放。下面是使用 with open() 打开文件的示例：
+```python
+# 使用 with open() 打开文件
+with open('example.txt', 'r') as file:
+    # 在这里进行文件操作
+    # 读取文件内容、写入数据等
+    pass  # 这里可以编写具体的文件操作代码
+```
+在上述代码中，我们使用 with open() 打开名为 "example.txt" 的文件，并将文件对象赋值给变量 file。在代码块内部，我们可以执行各种文件操作，如读取文件内容、写入数据等。
+使用 with open() 有以下几个优点：
+- 自动关闭文件：不需要手动调用 close() 方法来关闭文件，当代码块执行完毕时，文件会自动关闭。
+- 异常安全性：即使在文件操作过程中发生异常，也能确保文件被正确关闭，避免资源泄露。
+- 简化代码：省去了手动关闭文件的步骤，使代码更简洁、易读。
+此外，with open() 还可以指定文件的打开模式和编码方式。例如，with open('example.txt', 'r', encoding='utf-8') as file: 指定了以只读模式打开文件，并使用 UTF-8 编码解析文件内容。
+#### 1.14.2 读取文件
+使用 with open() 可以读取文件中的内容。下面是使用 with open() 来读取文件的示例：
+```python
+# 使用 with open() 读取文件
+with open('example.txt', 'r') as file:
+    content = file.read()
+    print(content)
+```
+在上述代码中，我们使用 with open() 打开名为 "example.txt" 的文件，并将文件对象赋值给变量 file。在 with 代码块内部，我们使用 read() 方法读取整个文件的内容，并将结果赋值给 content 变量。然后我们打印出文件的内容。
+需要注意以下几点：
+- 第一个参数 'example.txt' 是文件的路径和名称。可以使用相对路径或绝对路径来指定文件位置。
+- 'r' 是打开文件的模式参数，表示以只读模式打开文件。
+- 代码块执行完毕后，with open() 会自动关闭文件，无需手动调用 close() 方法。
+
+除了 read() 方法，还可以使用其他方法来读取文件内容。例如：
+- readline()：逐行读取文件内容。
+```python
+# 逐行读取文件内容，并将每行内容打印出来。readline() 方法每次读取一行，直到读取完整个文件
+with open('example.txt', 'r') as file:
+    line = file.readline()
+    while line:
+        print(line)
+        line = file.readline()
+```
+在上述示例中，我们使用 with open() 打开名为 "example.txt" 的文件，并将文件对象赋值给变量 file。然后，我们使用 readline() 方法读取文件的第一行，并将结果赋值给变量 line。接着，在一个 while 循环内，我们打印出当前行的内容，并再次调用 readline() 方法读取下一行。这个过程一直重复，直到 readline() 方法返回一个空字符串，表示已经读取完整个文件。
+
+需要注意的是，readline() 方法会保留行末的换行符 \n，如果不想打印换行符，可以使用 print(line, end='') 来实现。
+
+- readlines()：将文件内容以行为单位读取到一个列表中。
+```python
+# 文件的每一行读取到一个列表 lines 中，然后通过循环遍历列表并打印出每行内容。
+with open('example.txt', 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        print(line)
+```
+在上述示例中，我们使用 with open() 打开名为 "example.txt" 的文件，并将文件对象赋值给变量 file。然后，我们使用 readlines() 方法将文件的所有行读取到一个列表 lines 中。接下来，我们使用循环遍历列表，并打印出每一行的内容。
+
+需要注意的是，readlines() 方法将每一行的末尾换行符 \n 保留在了列表元素中。如果不想打印换行符，可以使用 print(line, end='') 来实现。
+#### 1.14.3 写入文件
+1. 覆盖写入
+- 使用写入模式 'w' 打开文件，如果文件已经存在，将会清空文件内容，并写入新的内容。
+```python
+# 覆盖写入
+with open("example.txt", "w") as file:
+    file.write("This will overwrite the existing content.\n")
+```
+2. 追加写入
+- 使用追加模式 'a' 打开文件，如果文件已经存在，将会在文件末尾追加新的内容。
+```python
+# 追加写入
+with open("example.txt", "a") as file:
+    file.write("This will be appended to the existing content.\n")
+```
+在使用写入模式 'w' 打开文件时，如果文件不存在，则会创建一个新文件。在使用追加模式 'a' 打开文件时，如果文件不存在，则同样会创建一个新文件。
+3. 多字符串写入
+writelines() 是 Python 文件对象的一个方法，用于将字符串序列（列表、元组等）写入文件中。它会将序列中的每个字符串作为一行写入文件，不会自动添加换行符。以下是使用 writelines() 方法的示例：
+```python
+lines = ["Line 1\n", "Line 2\n", "Line 3\n"]
+
+# 使用 writelines() 写入文件
+with open("example.txt", "w") as file:
+    file.writelines(lines)
+```
 ### 1.15 精简代码神器-模块
+1. 模块
+在 Python 中，模块是一个包含了 Python 定义和语句的文件。模块使得代码的组织、重用和维护变得更加简单。模块可以包含函数、类、变量和其他可执行代码，它们可以在其他 Python 程序中导入和使用。
+一个模块通常是一个以 .py 为扩展名的 Python 脚本文件，其中包含了 Python 代码。模块文件中的代码可以通过导入该模块来在其他地方使用。
+
+以下是模块的一些常见用法：
+1） 创建模块：
+创建一个新的 Python 文件，并编写自己的代码，例如：
+```python
+# example_module.py
+
+def say_hello(name):
+    print(f"Hello, {name}!")
+
+def add(a, b):
+    return a + b
+
+PI = 3.14159
+```
+2） 导入模块：
+在其他 Python 文件中使用 import 关键字导入模块，然后就可以使用模块中的函数、变量等。
+```python
+# main.py
+
+import example_module
+
+example_module.say_hello("Alice")  # 输出：Hello, Alice!
+result = example_module.add(10, 5)
+print(result)  # 输出：15
+print(example_module.PI)  # 输出：3.14159
+```
+3） 使用 from 导入：
+可以使用 from 关键字从模块中导入特定的函数、变量等，而无需使用模块名前缀。
+```python
+# main.py
+
+from example_module import say_hello, PI
+
+say_hello("Bob")  # 输出：Hello, Bob!
+print(PI)  # 输出：3.14159
+```
+4） 重命名导入：
+可以使用 as 关键字为导入的模块或函数重命名，以便更方便地使用。
+```python
+# main.py
+
+import example_module as ex
+
+ex.say_hello("Charlie")  # 输出：Hello, Charlie!
+```
+5）dir() 函数：
+dir() 函数是一个内置函数，用于查找并返回一个对象的所有属性和方法的列表。
+```python
+# 查找模块的所有属性和方法
+import random
+
+# 使用dir()函数获取math模块的所有属性和方法列表
+print(dir(random))
+```
+输出：
+```python
+['BPF',
+ 'LOG4',
+ 'NV_MAGICCONST',
+ 'RECIP_BPF',
+ 'Random',
+ 'SG_MAGICCONST',
+ 'SystemRandom',
+ 'TWOPI',
+ '_BuiltinMethodType',
+ '_MethodType',
+ '_Sequence',
+ '_Set',
+ '__all__',
+ '__builtins__',
+ '__cached__',
+ '__doc__',
+ '__file__',
+ '__loader__',
+ '__name__',
+ '__package__',
+ '__spec__',
+ '_acos',
+ '_bisect',
+ '_ceil',
+ '_cos',
+ '_e',
+ '_exp',
+ '_inst',
+ '_itertools',
+ '_log',
+ '_os',
+ '_pi',
+ '_random',
+ '_sha512',
+ '_sin',
+ '_sqrt',
+ '_test',
+ '_test_generator',
+ '_urandom',
+ '_warn',
+ 'betavariate',
+ 'choice',
+ 'choices',
+ 'expovariate',
+ 'gammavariate',
+ 'gauss',
+ 'getrandbits',
+ 'getstate',
+ 'lognormvariate',
+ 'normalvariate',
+ 'paretovariate',
+ 'randint',
+ 'random',
+ 'randrange',
+ 'sample',
+ 'seed',
+ 'setstate',
+ 'shuffle',
+ 'triangular',
+ 'uniform',
+ 'vonmisesvariate',
+ 'weibullvariate']
+```
+6）help() 函数：
+help() 函数是一个内置函数，用于获取关于对象、函数、模块等的帮助信息。它提供了对象的文档字符串（docstring）以及其他相关的帮助信息。
+```python
+# 获取内置函数的帮助信息
+help(abs)
+```
+输出：
+```python
+Help on built-in function abs in module builtins:
+
+abs(x, /)
+    Return the absolute value of the argument.
+```
+2. 包
+在 Python 中，包（Package）是一个包含了模块和子包的文件夹，用于更好地组织和管理 Python 代码。它是一种层次化的目录结构，允许你将相关的模块和子包放在同一个文件夹下，以便更好地组织和管理代码库。
+3. 库
+在 Python 中，我们可以将库分为三种类型：内置库、自定义库和第三方库。
+1）内置库（Built-in Libraries）：
+- Python 语言自带了一些内置库，它们是 Python 解释器的一部分，无需额外安装即可使用。
+- 内置库提供了基本的功能，如文件操作、字符串处理、数学运算、日期时间处理等。
+- 例如：os、math、datetime 等。
+无需额外安装，可以直接导入使用。
+```python
+import os
+
+# 使用内置库的功能
+current_directory = os.getcwd()  # 获取当前工作目录
+```
+2）自定义库（Custom Libraries）：
+- 自定义库是由开发人员自己编写的库，用于封装和重用自己写的代码。
+- 将常用的功能封装在一个或多个模块中，可以在多个项目中重复使用，提高代码的可维护性和复用性。
+- 开发人员可以根据项目的需求自行创建和组织自定义库。
+- 需要先编写代码并保存为模块，然后在其他项目中导入使用。
+```python
+# my_module.py
+def my_function():
+    print("This is a custom function.")
+
+# main.py
+from my_module import my_function
+
+my_function()  # 输出：This is a custom function.
+```
+3）第三方库（Third-party Libraries）：
+- 第三方库是由其他开发者或组织编写的，供 Python 社区使用的库。
+- 它们不是 Python 解释器的一部分，因此需要使用包管理器（如 pip）进行安装。
+- 第三方库提供了各种功能，涵盖了数据科学、机器学习、Web 开发、图形界面、网络通信等众多领域。
+- 开发人员可以根据项目的需求选择适合的第三方库，并通过 pip install 命令进行安装。
+```python
+pip install requests  # 安装 requests 第三方库
+
+# main.py
+import requests
+
+response = requests.get('https://www.baidu.com')
+```
+<style>
+    th {
+        text-align: center;
+    }
+</style>
+<table>
+    <tr> <!-- 第一行数据 -->
+        <th colspan="2">常用的pip命令 </th> <!-- 表头，用于居中显示；合并 9 行为 CBW 数据封包 -->
+    </tr>
+    <tr> <!-- 第二行数据 -->
+    <td> pip install 库名 </td>
+    <td> 安装可用的最细版本 </td>
+    </tr>
+    <tr> <!-- 第三行数据 -->
+    <td> pip install 库名==版本号 </td>
+    <td> 安装指定版本 </td>
+    </tr>
+	<tr> <!-- 第四行数据 -->
+    <td> pip show 库名 </td>
+    <td> 显示已安装库的信息 </td>
+    </tr>
+		<tr> <!-- 第五行数据 -->
+    <td> pip uninstall 库名 </td>
+    <td> 卸载 </td>
+    </tr>
+		<tr> <!-- 第六行数据 -->
+    <td> pip list </td>
+    <td> 列表列出已安装的库 </td>
+    </tr>
+		<tr> <!-- 第七行数据 -->
+    <td>pip help </td>
+    <td> 帮助显示命令的帮助 </td>
+    </tr>
+</table>
+
 ### 1.16 项目实战
 
 ## 2. Python自动化办公
