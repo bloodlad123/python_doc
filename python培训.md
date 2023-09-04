@@ -2373,10 +2373,434 @@ response = requests.get('https://www.baidu.com')
 </table>
 
 ### 1.16 项目实战
+#### 1.16.1 导入数据
+商品信息.txt
+```
+商品,售价,库存
+维他柠檬茶,3.5,100
+特仑苏牛奶,7.5,50
+王老吉凉茶,3.5,55
+```
+```python
+with open(r"C:\Users\feng.jie\Desktop\商品信息.txt","r",encoding="utf-8") as file:
+    linel = file.readline()
+    line2= file.readline()
+line2
+```
+输出
+```python
+'维他柠檬茶,3.5,100\n'
+```
+```python
+# 先用切片方法去除行尾处的换行符，并使用Split()方法指定英文逗号为分隔符，将字符串中的商品，售价，库存等分割成一个个独立的字符串
+info = line2[:-1].split(",")
+info
+```
+输出
+```python
+['维他柠檬茶', '3.5', '100']
+```
+```python
+# 创建一个字典data，将商品名作为key，售价和库存存放在一个列表中，作为字典的值
+data = {}
+data[info[0]] = [float(info[1]),int(info[2])]
+data
+```
+输出
+```python
+{'维他柠檬茶': [3.5, 100]}
+```
+```python
+#优化下代码，导入文件中的全部数据
+with open(r"C:\Users\feng.jie\Desktop\商品信息.txt","r",encoding="utf-8") as file:
+    content = file.readlines()
 
+for line in content:
+    info = line[:-1].split(",")
+    # 剔除表头
+    if info[0] != '商品':
+        data[info[0]] = [float(info[1]),int(info[2])]
+data
+```
+输出
+```python
+{'维他柠檬茶': [3.5, 100], '特仑苏牛奶': [7.5, 50], '王老吉凉茶': [3.5, 5]}
+```
+#### 1.16.2 功能设计
+1. 展示商品
+```python
+def show_goods():
+    for goods in data.keys():
+        print(goods,data[goods][0],data[goods][1])
+# 调用函数
+show_goods()
+```
+输出
+```python
+维他柠檬茶 3.5 100
+特仑苏牛奶 7.5 50
+王老吉凉茶 3.5 5
+```
+```python
+# 优化函数
+def show_goods():
+    print('-'*10 + '仓库' + '-'*10)
+    print('商品名\t\t单价\t库存')
+    for goods in data.keys():
+        print(f'{goods}\t{data[goods][0]}\t{data[goods][1]}')
+    print('-'*10 + '仓库' + '-'*10)
+# 调用函数
+show_goods()
+```
+输出
+```python
+----------仓库----------
+商品名		单价	库存
+维他柠檬茶	3.5	100
+特仑苏牛奶	7.5	50
+王老吉凉茶	3.5	5
+----------仓库----------
+```
+2. 删除商品
+```mermaid
+graph LR
+    st((开始))
+    input[输入商品名称]
+    cond{商品是否存在}
+    op1[删除该商品]
+    op2[提示没有该商品]
+    e((结束))
+
+    st --> input
+    input --> cond
+    cond -- 是 --> op1
+    op1 --> e
+    cond -- 否 --> op2
+    op2 --> e
+```
+```python
+def del_goods():
+    goods = input("请输入你要删除的商品名称：")
+    if goods in data.keys():
+        print("正在删除...")
+        print(f"{goods}:\t单价:{data[goods][0]}\t库存:{data[goods][1]}")
+        data.pop(goods)
+        print("删除成功")
+    else:
+        print("没有该商品！")
+# 调用函数
+del_goods()
+# 输入：维他柠檬茶
+```
+输出
+```python
+正在删除...
+维他柠檬茶:	单价:3.5	库存:100
+删除成功
+```
+3. 添加商品
+```mermaid
+graph LR
+    st((开始))
+    input[输入商品名称]
+    cond{商品是否存在}
+    op1[打印商品信息]
+    op2[提示没有该商品]
+    op3[输入商品单价和库存数量]
+    op4[将商品信息添加到字典中]
+    e((结束))
+
+    st --> input
+    input --> cond
+    cond -- 是 --> op1
+    op1 --> e
+    cond -- 否 --> op2
+    op2 --> op3
+    op3 --> op4
+    op4 --> e
+```
+```python
+def add_goods():
+    goods = input("请输入你要添加的商品名称：")
+    if goods in data.keys():
+        print("商品已存在")
+        print(f"{goods}:\t单价:{data[goods][0]}\t库存:{data[goods][1]}") 
+    else:
+        price = input("请输入商品单价：")
+        qty = input("请输入商品库存：")
+        data[goods] = [float(price),int(qty)]
+        print("添加成功")
+# 调用函数
+add_goods()
+# 请输入你要添加的商品名称：娃哈哈
+# 请输入商品单价：2
+# 请输入商品库存：10
+data # out:{'特仑苏牛奶': [7.5, 50], '王老吉凉茶': [3.5, 5], '娃哈哈': [2.0, 10]}
+```
+3. 售出商品
+```mermaid
+graph LR
+    st((开始))
+    input[输入商品名称]
+    cond1{商品是否存在}
+    op1[输入售出数量]
+    op2[提示没有该商品]
+    cond2{售出数量>库存}
+    op3[输出该商品的库存数量]
+    op4[输入售出数量]
+    op5[更新商品的库存数量]
+    e((结束))
+
+    st --> input
+    input --> cond1
+    cond1 -- 是 --> op1
+    op1 --> cond2
+    cond2 -- 是 --> op3
+    cond1 -- 否 --> op2
+    op3 --> op4
+    op4 --> cond2
+    cond2 -- 否 --> op5
+    op2 --> e
+    op5 --> e
+```
+```python
+def sale_goods():
+    goods = input("请输入你要售出的商品名称：")
+    if goods in data.keys():
+        print(f"{goods}:\t单价:{data[goods][0]}\t库存:{data[goods][1]}") 
+        sale_num = int(input("请输入你售出的数量："))
+        while sale_num > data[goods][1]:
+            print(f"仓库里面只有{data[goods][1]}个{goods}噢")
+            sale_num = int(input("请输入你售出的数量:"))
+            if sale_num == 0:
+                break
+            else:
+                data[goods][1]-= sale_num
+                print(f"已售出{sale_num}个{goods}，仓库剩余{data[goods][1]}个")
+    else:
+        print("没有该商品！")
+# 调用函数
+sale_goods()
+```
+4. 主程序
+```python
+while True:
+    opts=input("请输出你要进行的操作,删除商品请输入del,添加商品请输入add,售出商品请输入sale,展示商品请输入show,退出系统请输入exit")
+    show_goods()
+    if opts =="del":
+        del_goods()
+    elif opts == "add":
+        add_goods()
+    elif opts =="sale":
+        sale_goods()
+    elif opts =="exit":
+        print("正在退出系统......")
+        print("已退出")
+        break
+    else:
+        print('请按照提示重新输入！')
+```
 ## 2. Python自动化办公
 *主要解决Excel和word处理数据效率低以及步骤繁杂的问题。*
 ### 2.1 用Python高效处理Excel
+openpyxl 是一个用于操作 Excel 文件（.xlsx 格式）的 Python 库。它提供了一组功能强大且易于使用的方法，用于读取、创建和修改 Excel 文件。
+1. openpyxl安装
+```python
+!pip install openpyxl==3.0.7
+```
+或者win+R输入cmd，回车输入pip install openpyxl完成安装
+2. 查看openpyxl的版本
+```python
+import openpyxl as ox
+print(ox.__version__)
+```
+3. 新建工作簿
+```python
+import openpyxl as ox
+workbook_1 = ox.Workbook(r"C:\Users\feng.jie\Desktop\文件1.xlsx") 
+```
+4. 保存创建的工作簿
+```python
+workbook_1.save(r"C:\Users\feng.jie\Desktop\文件1.xlsx") #保存工作簿
+```
+5. 打开工作簿
+```python
+import openpyxl as ox
+book = ox.load_workbook("工资条.xlsx") # 替换为你的 Excel 文件路径
+```
+6. 打开工作表
+```python
+import openpyxl as ox
+book = ox.load_workbook("工资条.xlsx")
+sheet_1 = book["工资条"] #指定工作表
+print(sheet_1) # out:<Worksheet "工资条">
+```
+7. 默认打开第一张工作表
+```python
+import openpyxl as ox
+book = ox.load_workbook("工资条.xlsx")
+sheet_1 = book.active
+print(sheet_1) # out:<Worksheet "工资条">
+```
+8. 获取工作簿的所有工作表
+在 openpyxl 中，worksheets 是一个属性，用于获取 Excel 工作簿中的所有工作表
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")  # 替换为你的 Excel 文件路径
+# 获取所有工作表
+all_sheets  = book.worksheets 
+# 打印所有工作表名称
+print(all_sheets) #out:[<Worksheet "工资条">, <Worksheet "销售部">, <Worksheet "管理部">]
+# 遍历工作表
+for sheet in all_sheets:
+    print(sheet.title)  # 打印工作表名称，out：工资条 销售部 管理部
+```
+9. 在工作簿中添加新的工作表
+在 openpyxl 中，要创建一个新的工作表，可以使用 create_sheet() 方法。该方法属于 Workbook 对象，并接受一个可选的参数 title，用于指定新工作表的名称。如果未提供 title 参数，则会生成一个默认的名称。
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")
+# 创建一个新的工作表
+new_sheet = book.create_sheet(title="行政部")
+# 或者使用默认的名称
+# new_sheet = book.create_sheet()
+
+# 保存工作簿
+book.save('工资条.xlsx')
+```
+10. 删除指定工作表
+在 openpyxl 中，要移除（删除）一个工作表，可以使用 remove() 方法。该方法属于 Workbook 对象，接受一个参数 sheet，用于指定要移除的工作表。
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")
+# 删除指定工作表
+sheet_to_remove  = book["行政部"]
+book.remove(sheet_to_remove)
+# 保存工作簿
+book.save('工资条.xlsx')
+```
+11. 复制工作表
+在 openpyxl 中，要复制一个工作表，可以使用 copy_worksheet() 方法。该方法属于 Workbook 对象，并接受一个参数 worksheet，用于指定要复制的工作表。
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")
+# 获取要复制的工作表
+source_sheet = book['销售部']
+# 创建新的工作表
+book.copy_worksheet(source_sheet)
+# 保存工作簿
+book.save("工资条.xlsx")
+```
+```python
+# 修改新工作表的名称
+target_sheet.title = 'Copy of Sheet1'  # 替换为你想要的名称
+```
+12. 读取工作表其中一个单元格的值
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")
+sheet = book['工资条']
+cell = sheet["A5"].value #获取A5单元格的值
+print(cell)
+```
+12. 读取工作表其中一个单元格的值_2
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")
+sheet = book['工资条']
+cell = sheet.cell(row = 5,column = 1).value  # 获取第5行，第1列的值
+print(cell)
+```
+13. 读取工作表指定区域中单元格的值
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")
+sheet = book['工资条']
+area_1=sheet['A1:D10']# 获取A1到D10单元格的值，一行一行获取
+area_2= sheet['A:C'] # 获取A到C列的值，一列一列获取
+area_3=sheet['1:10'] # 获取1到10行的值，按行获取
+print(area_1)
+```
+14. 使用双层for循环来实现提取sheet['A1:D10']单元格中的值
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")
+sheet = book['工资条']
+for i in sheet['A1:D10']:
+    for j in i :
+        print(j.value)
+```
+15. 按行按列的方法来确定单元格范围
+iter_rows() 方法是 openpyxl 中的一个功能强大的方法，用于迭代工作表中的行。它可以接受多个参数来指定要迭代的区域和其他选项。
+下面是 iter_rows() 方法的基本语法：
+```python
+iter_rows(min_row=None, max_row=None, min_col=None, max_col=None, values_only=False)
+```
+这些参数的含义如下：
+- min_row：迭代的起始行号，默认为工作表的第一行。
+- max_row：迭代的结束行号（包括该行），默认为工作表的最后一行。
+- min_col：迭代的起始列字母，默认为工作表的第一列。
+- max_col：迭代的结束列字母（包括该列），默认为工作表的最后一列。
+- values_only：一个布尔值，指示是否仅返回单元格的值而不包括其他属性，默认为 False。
+```python
+import openpyxl as ox
+# 打开 Excel 文件
+book = ox.load_workbook("工资条.xlsx")
+# 获取工作表
+sheet = book['工资条']
+# 遍历工作表的所有行并输出值
+for row in sheet.iter_rows(min_row=1, max_row=3, min_col=1, max_col=3, values_only=True):
+    for value in row:
+        print(value)
+```
+16. 修改工作表中指定单元格的值
+cell() 方法是 openpyxl 中用于访问单元格的方法。它可以接受一个或多个参数，以指定要访问的单元格的位置。
+下面是 cell() 方法的基本语法：
+```python
+cell(row, column)
+```
+其中，row 表示行号，column 则表示列号（使用字母表示）。注意，行号和列号都是从 1 开始计数的，而不是从 0 开始。
+```python
+import openpyxl as ox
+def open_xlsx():
+    # 打开 Excel 文件
+    book = ox.load_workbook("工资条.xlsx")
+    # 获取工作表
+    sheet = book['工资条']
+open_xlsx()
+# 打印修改前A1、B2、C3的值
+A = sheet.cell(row=1, column=1).value # A1的值
+B = sheet.cell(row=2, column=2).value # B2的值
+C = sheet.cell(row=3, column=3).value # C3的值
+print(f'修改前:{A}\t{B}\t{C}')
+
+# 修改 B2 单元格的值
+cell = sheet.cell(row=2, column=2)
+cell.value = "New Value"
+
+# 修改 C3 单元格的值
+sheet['C3'] = "New Value"
+
+# 保存修改后的文件
+book.save("工资条.xlsx")
+
+open_xlsx()
+# 打印修改后A1、B2、C3的值
+A = sheet.cell(row=1, column=1).value
+B = sheet.cell(row=2, column=2).value
+C = sheet.cell(row=3, column=3).value
+print(f'修改后:{A}\t{B}\t{C}')
+```
+#### 2.1.1 自动创建和打开工作簿
+#### 2.1.2 自动操作工作表
 ### 2.2 快速拆分工作表
 ### 2.3 Excel案例课
 ### 2.4 会议照片汇总与批量制作报销单
