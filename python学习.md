@@ -3119,6 +3119,93 @@ df = df.set_index('均价排名')
 print(df.head())
 ```
 ### 2.4 数据填充
+1. 读取数据
+```python
+import pandas as pd
+df = pd.read_csv('订单.csv',encoding='ansi')
+```
+2. 补全日期
+fillna() 函数是 pandas 库中的一个方法，用于填充数据中的缺失值。它可以根据指定的规则来替换缺失值，使数据集更完整。
+
+fillna() 方法的常见用法如下：
+```python
+DataFrame.fillna(value=None, method=None, axis=None, inplace=False, limit=None, downcast=None)
+Series.fillna(value=None, method=None, axis=None, inplace=False, limit=None, downcast=None)
+```
+其中，常用参数如下：
+
+- value：用于替换缺失值的具体值，可以是标量（如数字或字符串），也可以是字典、Series 或 DataFrame，用于不同索引位置的替换。
+- method：指定填充缺失值的方法，可选的值包括 'pad'、'ffill'（向前填充）和 'backfill'、'bfill'（向后填充）。
+- axis：指定填充的方向，可选的值有 'index'（按行填充）和 'columns'（按列填充）。
+- inplace：是否在原地修改数据，如果设置为 True，则会直接修改原始的 DataFrame 或 Series 对象，而不返回副本。
+- limit：在指定的填充方向上连续填充的最大数量。
+- downcast：如果指定了该参数，则尝试将填充结果强制转换为更低精度的数据类型。
+```python
+# 使用前一个非缺失值填充缺失值
+df['销售日期'] = df['销售日期'].fillna(method='ffill')
+df
+```
+3. 删除缺失值
+isna() 方法是 pandas 库中的一个函数，用于检测数据中的缺失值。它返回一个布尔类型的掩码，表示数据中每个元素是否为缺失值。
+
+isna() 方法的常见用法如下：
+```python
+DataFrame.isna()
+Series.isna()
+```
+调用 isna() 方法后，返回一个与原始对象形状相同的布尔类型的对象，其中缺失值的位置为 True，非缺失值的位置为 False。
+
+dropna() 函数是 pandas 库中的一个方法，用于删除数据中包含缺失值的行或列。
+
+dropna() 方法的常见用法如下：
+```python
+DataFrame.dropna(axis=0, how='any', thresh=None, subset=None, inplace=False)
+Series.dropna(axis=0, how='any', inplace=False)
+```
+其中，常用参数如下：
+
+- axis：指定删除缺失值的方向，可选的值有 'index'（按行删除）和 'columns'（按列删除）。
+- how：指定删除的条件，可选的值有 'any'（只要存在缺失值就删除）和 'all'（只有全部为缺失值才删除）。
+- thresh：指定删除行或列时所需非缺失值的最小数量。如果设置为整数 n，则删除包含少于 n 个非缺失值的行或列。
+- subset：指定要考虑的特定列或索引标签。
+inplace：是否在原地修改数据，如果设置为 True，则会直接删除原始的 DataFrame 或 Series 对象中的相应行或列，而不返回副本。
+```python
+# 使用 df['销售信息'].isna() 条件可以得到一个布尔型 Series，其中缺失值对应的元素为 True，非缺失值对应的元素为 False。
+df['销售信息'].isna()
+# 筛选出 '销售信息' 列中包含缺失值的行。
+df[df['销售信息'].isna()]
+# 删除缺失值的所有行
+df = df.dropna(subset=['销售信息'],how='any')
+print(df)
+```
+4.信息补齐
+(1) 提取订单信息
+```python
+def get_local(s):
+    local =['广东','福建','北京','江苏','南京','安徽','浙江','上海']
+    for l in local:
+        if l in s:
+            return l
+# 新增'销售区域'列
+df['销售区域']=df['销售信息'].apply(get_local)
+```
+```python
+def get_channel(s):
+    channel=['京东','拼多多','抖音','天猫','实体']
+    for c in channel:
+        if c in s:
+            return c
+# 新增'销售渠道'列
+df['销售渠道']=df['销售信息'].apply(get_channel)
+
+# 删除'销售信息'列
+df = df.drop(columns = '销售信息')
+```
+(2) 提取不存在数据缺失问题的数据
+```python
+dffull = df[~df['销售数量'].isna()].copy() # ~ 是一个逻辑非（negation）运算符，用于对选择条件进行取反
+# df.copy() 是一个用于复制 DataFrame 对象的方法
+```
 ### 2.5 数据汇总
 ### 2.6 统计分析
 ### 2.7 综合应用(一)
