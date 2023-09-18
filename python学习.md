@@ -2812,7 +2812,312 @@ DataFrame.to_excel(excel_writer, sheet_name='Sheet1', index=True, ...)
 df.to_excel('工资条_修改.xlsx',index=False)
 ```
 ### 2.2 数据筛选
+1. 读取数据文件
+read_csv() 是 pandas 库中用于读取 CSV 文件的函数。它可以将 CSV 文件中的数据读取到一个 pandas 的 DataFrame 对象中，方便进行数据分析和处理。下面是该方法的介绍和一些示例:
+```python
+# 语法
+pandas.read_csv(filepath_or_buffer, sep=',', delimiter=None, header='infer', names=None, index_col=None, usecols=None, dtype=None, skiprows=None, na_values=None, comment=None, skip_blank_lines=True, encoding=None)
+```
+*参数说明*
+以下是一些常用的参数：
+
+- filepath_or_buffer：需要读取的 CSV 文件的路径或 URL，也可以直接传入文件对象。
+- sep：读取csv文件时指定的分隔符，默认为逗号（','）。
+- delimiter：分隔符的另一个名字，与 sep 功能相似。
+- header：指定哪一行作为表头，通常为第一行。如果设置为 None，表示没有表头行，会默认将数据的第一行作为表头。
+- names：自定义列名列表，用于替代原始数据中的表头行。
+- index_col：将某列指定为索引列。
+- usecols：指定需要读取的列，可以传入列的名称或列的索引号，还可以使用切片语法。
+- dtype：用于指定每一列的数据类型。
+- skiprows：跳过指定的行数，可以是一个整数或列表。
+- na_values：用于将特定字符串识别为缺失值。
+- comment：指定注释符号。
+- skip_blank_lines：是否跳过空行，默认为 True。
+- encoding：指定编码方式，默认为 None。
+```python
+import pandas as pd
+df = pd.read_csv('data.csv',encoding='ansi')
+```
+2. 查看数据的基本信息
+```python
+df.info()
+```
+3. 查看前3行数据
+```python
+df.head(3)
+```
+4. 提取某列数据
+```python
+goods_name = df['商品名称']
+```
+5. 打印去重的列数据
+```python
+print(set(goods_name))
+```
+6. 统计货物的种类数
+```python
+print(len(set(goods_name)))
+```
+7. 多列提取
+```python
+goods_sales = df[['商品名称','销售数量']]
+goods_sales.head()
+```
+8. 行提取
+```python
+# 提取所以为10,11的行（切片时不包括最大的索引值）
+print(df[10:12])
+```
+9. 单行列选择
+loc 是 Pandas 中用于基于标签（label）进行索引和选择数据的方法。它允许你按照行或列的标签（标签可以是单个值，也可以是范围、布尔数组等）来访问和修改 DataFrame 中的数据。
+使用 loc 索引时，你可以提供一个或多个标签来指定要选择的行和列。语法如下：
+```python
+df.loc[row_label, column_label]
+```
+其中，df 是要操作的 DataFrame 对象，row_label 是要选择的行标签，column_label 是要选择的列标签。你可以使用单个标签、切片、布尔数组等各种方式来指定标签。
+```python
+# 提取索引为10的行
+print(df.loc[10])
+```
+```python
+# 选择索引为 10 的行和 '负责人' 列的交叉点数据
+print(df.loc[10,'负责人'])
+```
+10. 多行列选择
+```python
+# 通过切片定位索引为10,11的行，再定位 '商品名称','销售数量'所在列 
+print(df[10:12][['商品名称','销售数量']])
+```
+11. 多行列选择（连续多行）
+```python
+# 选择索引从 10 到 12 的行（包括 12），'商品名称','销售数量'列所在的数据
+print(df.loc[10:12,['商品名称','销售数量']])
+```
+12. 多行列选择（不连续多行）
+```python
+# 选择索引1,5,10的行，'商品名称','销售数量'列所在的数据
+print(df.loc[[1,5,10],['商品名称','销售数量']])
+```
+13. 行索引提取行数据
+在 Pandas 中，DataFrame 和 Series 对象具有两种类型的索引：显示索引（explicit index）和隐式索引（implicit index）。
+- 显式索引：显式索引是用户自定义的、可标识数据的索引。它可以是整数、字符串或其他数据类型。显式索引通过 index 属性来表示。
+```python
+# 设置显示索引为'订货日期'列
+df1 = df.set_index('订货日期', inplace=False)
+# 通过显式索引选择单个行
+row = df1.loc['2023-9-1']
+```
+- 隐式索引：隐式索引是由 Pandas 自动生成的默认索引，从 0 开始递增。它通过 iloc 属性访问。
+
+iloc 是 Pandas 中用于基于位置（整数索引）进行索引和选择数据的方法。它允许你按照行号和列号来访问和修改 DataFrame 中的数据。
+
+使用 iloc 索引时，你可以提供一个或多个整数来指定要选择的行和列。语法如下：
+```python
+df.iloc[row_index, column_index]
+```
+其中，df 是要操作的 DataFrame 对象，row_index 是要选择的行索引，column_index 是要选择的列索引。
+```python
+# 选择第10行数据
+print(df.iloc[10])
+```
+14. 用iloc()方法提取表格中的某个值
+```python
+# 选择索引为10的行的第1列数据
+print(df.iloc[10,1])
+```
+15. 用iloc()方法按行做切片
+```python
+# 提取索引为7到9的行的数据
+df3 = df.iloc[7:10]
+df3.head()
+```
+16. iloc()方法提取列数据
+```python
+# 获取商品名称列的数据（：表示所有的行）
+df.iloc[:,1]
+```
+17. iloc()同时对行和列进行切片
+```python
+# 选择行索引为2到4的行，列索引为1到3的列的单元格数据
+df.iloc[2:5,1:4]
+```
+18. 单一条件筛选
+```python
+# 选择商品名称列的值为'商品1'的行
+goods1 = df.loc[df['商品名称']=='商品1']
+print(goods1)
+```
+```python
+# 选择商品名称列的值为'商品1'的行,'订货日期'和'销售数量'的列的数据
+goods1 = df.loc[df['商品名称']=='商品1',['订货日期','销售数量']]
+print(goods1)
+```
+19. 多条件筛选
+```python
+# 选择商品名称列的值为'商品1'且'销售数量'大于1000的行,'订货日期'、'客户'和'销售数量'的列的数据
+goods1 = df.loc[(df['商品名称']=='商品1') & (df['销售数量']>1000),['订货日期','客户','销售数量']]
+print(goods1)
+```
+20. 将结果保存为CSV文件
+to_csv() 是 Pandas 库中的一个方法，用于将 DataFrame 对象保存为 CSV（逗号分隔值）文件。CSV 文件是一种常见的文本文件格式，用于存储结构化的表格数据。
+to_csv() 方法的语法如下：
+```python
+DataFrame.to_csv(path_or_buf, sep=',', na_rep='', columns=None, header=True, index=True, mode='w', encoding=None, date_format=None)
+```
+下面是一些常用参数的介绍：
+
+- path_or_buf：指定要保存的文件路径或文件对象。可以是一个字符串（表示文件路径），也可以是一个文件对象（如文件描述符、StringIO 对象等）。
+
+- sep：指定字段之间的分隔符，默认为逗号（,）。你可以使用其他字符作为分隔符，例如制表符（\t）。
+
+- na_rep：指定在遇到缺失值（NaN）时在文件中表示缺失值的字符串，默认为空字符串。
+
+- columns：指定要保存的列。可以传递一个列名列表，只保存指定的列；也可以传递一个布尔型序列，选择为 True 的列进行保存。
+
+- header：指定是否包含列名，默认为 True，表示保存列名。如果设置为 False，则不保存列名到文件中。
+
+- index：指定是否保存索引列，默认为 True，表示保存索引列。如果设置为 False，则不保存索引列到文件中。
+
+- mode：指定打开文件的模式，默认为 'w'，表示覆盖写入。你还可以选择其他模式，例如 'a' 表示追加写入。
+
+- encoding：指定保存文件时使用的字符编码，默认为 'utf-8'。
+
+- date_format：指定日期格式化字符串，用于保存日期类型的列到文件中。默认为 None，表示使用默认的日期格式。
+```python
+# 将goods1的数据保存到goods1.csv
+goods1.to_csv('goods1.csv',index=False,encoding='utf-8-sig')
+```
 ### 2.3 数据清洗
+数据清洗是对数据进行重新审查和校验的过程
+目的：删除重复信息、错误，提供数据一致性。
+1. 查看表格信息
+```python
+import pandas as pd
+df = pd.read_csv('房屋数据.csv',encoding='ansi')
+df.info()
+```
+2. 随机10行数据
+```python
+df.sample(10)
+```
+3. 去除序号列、去重
+(1) drop() 是 Pandas 库中 DataFrame 和 Series 对象的一个方法，用于删除指定的行或列。
+
+对于 DataFrame 对象，drop() 方法可以按照行或列的标签（或索引）进行删除操作。语法如下：
+```python
+DataFrame.drop(columns=None, axis=1, inplace=False)
+```
+- columns 参数用于指定要删除的列名，可以是单个列名的字符串，也可以是包含多个列名的列表或数组。
+- axis 参数表示操作的轴方向，0 表示按行删除，1 表示按列删除，默认为 1（按列删除）。
+- inplace 参数为 False 时表示返回一个删除指定列后的新 DataFrame，为 True 时表示就地修改原始 DataFrame，默认为 False。
+
+*需要注意的是，drop() 方法默认不改变原始 DataFrame 或 Series，而是返回一个新的对象。如果想就地修改原始对象，可以将 inplace 参数设置为 True。*
+
+(2) drop_duplicates() 是 Pandas 库中 DataFrame 和 Series 对象的一个方法，用于删除重复的行或列。
+
+对于 DataFrame 对象，drop_duplicates() 方法可以按照指定列中的值来判断是否为重复行，并将重复的行删除。语法如下：
+```python
+DataFrame.drop_duplicates(subset=None, keep='first', inplace=False)
+```
+- subset 参数用于指定要检查重复值的列，默认检查所有列；
+- keep 参数用于指定保留哪一个重复值，取值为 'first'（保留第一个出现的），'last'（保留最后一个出现的）或 False（全部删除），默认为 'first'；
+- inplace 参数为 False 时表示返回一个删除重复行后的新 DataFrame，为 True 时表示就地修改原始 DataFrame，默认为 False。
+
+*需要注意的是，drop_duplicates() 方法默认不改变原始 DataFrame 或 Series，而是返回一个新的对象。如果想就地修改原始对象，可以将 inplace 参数设置为 True。*
+```python
+# 删除序号列
+# df.drop('序号',axis=1)
+df = df.drop(columns=['序号'])
+# 去除重复数据行
+df.drop_duplicates(inplace=True)
+df.head(3)
+```
+2. 对列重命名
+rename() 是 Pandas 库中 DataFrame 对象的一个方法，用于重命名 DataFrame 的行索引或列索引。
+
+语法如下：
+```python
+DataFrame.rename(index=None, columns=None, inplace=False)
+```
+- index 参数用于重命名行索引，可以是一个字典，将原始行索引映射到新的行索引。
+- columns 参数用于重命名列索引，也可以是一个字典，将原始列索引映射到新的列索引。
+- inplace 参数为 False 时表示返回一个重命名后的新 DataFrame，为 True 时表示就地修改原始 DataFrame，默认为 False。
+
+*需要注意的是，rename() 方法默认不改变原始 DataFrame，而是返回一个新的对象。如果想就地修改原始对象，可以将 inplace 参数设置为 True*
+```python
+# 将列名'房屋名称'改为'房屋描述'
+df  = df.rename(columns = {'房屋名称':'房屋描述'})
+df.head(3)
+```
+3. 字符串提取字符
+```python
+x = '1室1厅1厨1卫1阳'
+print(int(x[0]))
+```
+4. 提取所有的房间数
+apply() 是 Pandas 库中 DataFrame 对象的一个方法，用于在指定的轴上应用自定义函数进行数据转换或计算。
+
+语法如下：
+```python
+DataFrame.apply(func, axis=0, raw=False, result_type=None, args=(), **kwds)
+```
+- func 参数表示要应用的函数，可以是一个自定义函数、lambda 表达式或已定义的内置函数。
+- axis 参数表示操作的轴方向，0 表示按列应用函数，1 表示按行应用函数，默认为 0（按列应用函数）。
+- raw 参数表示是否将每行或每列以 Series 的形式传递给函数，默认为 False，即将每个元素作为单独的参数传递给函数。
+- result_type 参数表示返回结果的类型，可以是 'expand'（展开）或 'reduce'（缩减），默认为 None，即根据返回值自动确定结果类型。
+- args 和 **kwds 参数用于传递给函数的额外参数。
+```python
+df['房间'] = df['户型'].apply(lambda x:int(x[0]))
+df.head(3)
+```
+5. 提取客厅餐厅数据
+```pyhon
+df['客厅餐厅'] = df['户型'].apply(lambda x:int(x[2]))
+df.head(3)
+```
+6. 提取楼层数字
+```python
+def floor(string):
+    sub = string.split('(') #按圆括号分割
+    if len(sub)>1:
+        sub = sub[1]
+        return int(sub[1:-2])
+    else:
+        return 0
+df['总楼层']  = df['楼层'].apply(floor)
+df.head(3)
+```
+6. 按均价排名重新设置索引
+rank() 函数是 Pandas 库中 DataFrame 和 Series 对象的一个方法，用于计算元素在序列中的排名。
+
+在 DataFrame 中，rank() 方法的语法如下：
+```python
+DataFrame.rank(axis=0, method='average', numeric_only=None, na_option='keep', ascending=True, pct=False)
+```
+- axis 参数表示操作的轴方向，0 表示按列计算排名，1 表示按行计算排名，默认为 0（按列计算排名）。
+- method 参数表示计算排名时的方法，可选值有 'average'、'min'、'max'、'first'，默认为 'average'。具体含义如下：
+'average'：相同值的元素平均排名（默认方法）。
+'min'：相同值的元素最小排名。
+'max'：相同值的元素最大排名。
+'first'：相同值的元素按照原始顺序排名。
+- numeric_only 参数表示是否只考虑数值类型的元素，默认为 None，即包括所有类型的元素。
+- na_option 参数表示如何处理缺失值，默认为 'keep'。具体含义如下：
+'keep'：保留缺失值，并将其视为有效数据的一部分。
+'top'：将缺失值排名为最高。
+'bottom'：将缺失值排名为最低。
+- ascending 参数表示排名的顺序，为 True 表示升序排列，为 False 表示降序排列，默认为 True。
+- pct 参数表示是否返回排名的百分比形式，默认为 False。若为 True，则返回排名除以序列长度后的百分比。
+```python
+# 利用rank()计算排名
+df['均价排名'] = df['均价'].rank(method='min',ascending=False)
+# 将值转为int类型
+df['均价排名'] = df['均价排名'].astype(int)
+# 对'均价排名'进行由大到小的排序
+df = df.sort_values(by  = '均价排名')
+# 将均价排名设置为行索引
+df = df.set_index('均价排名')
+print(df.head())
+```
 ### 2.4 数据填充
 ### 2.5 数据汇总
 ### 2.6 统计分析
